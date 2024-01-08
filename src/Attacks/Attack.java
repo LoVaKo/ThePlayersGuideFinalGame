@@ -1,7 +1,9 @@
 package Attacks;
 
+import ActionHandler.ActionMenu;
 import GameCharacters.GameCharacter;
 import Main.Party;
+import StatusEffects.StatusEffect;
 
 import java.util.Random;
 import java.util.Scanner;
@@ -9,19 +11,37 @@ import java.util.Scanner;
 public abstract class Attack {
     public final int MAX_DAMAGE;
     private final double SUCCESS_RATE;
+    private final StatusEffect effect;
+    private final boolean hasEffect;
     protected String name;
     protected DamageType damageType;
 
-    public Attack(String name, DamageType damageType, double successRate, int MAX_DAMAGE) {
+    public Attack(String name, DamageType damageType, double successRate, int MAX_DAMAGE, StatusEffect effect, boolean hasEffect) {
         this.name = name;
         this.damageType = damageType;
         this.SUCCESS_RATE = successRate;
         this.MAX_DAMAGE = MAX_DAMAGE;
+        this.effect = effect;
+        this.hasEffect = hasEffect;
     }
 
     public void useAttack(GameCharacter character, Party enemyParty, boolean isComputer) {
-        // Pick target
-        GameCharacter target = isComputer ? pickTargetComputer(enemyParty) : pickTarget(enemyParty);
+        // If it's the computer's turn, computer picks target
+        GameCharacter target = isComputer ? pickTargetComputer(enemyParty) : null;
+
+        // If it's a players turn, pickTargetmenu opens
+        if (!isComputer) {
+            int pickedChoice = this.pickTarget(enemyParty);
+            if (pickedChoice == 0) {
+                // If player picked 0, go back to ActionMenu
+                ActionMenu menu = new ActionMenu(character);
+                menu.print();
+                menu.pickAction();
+                return;
+            } else {
+                target = enemyParty.getCharacter(pickedChoice - 1);
+            }
+        }
 
         // Use attack
         System.out.println(character + " used " + this.name + " on " + target);
@@ -43,17 +63,27 @@ public abstract class Attack {
                 }
             }
 
-            System.out.println(this.name + " dealt " + damage + " damage to " + target);
-
-            if (damage < target.getCurrentHP()) {
-                target.setCurrentHP(target.getCurrentHP() - damage);
-                System.out.println(target + " is now at " + target.getCurrentHP() + "/" + target.getStartingHP() + " HP.");
-            } else {
-                System.out.println(target + " has been defeated!");
-                if (target.isEquipped()) target.lootCharacter(character);
-                enemyParty.removeCharacter(target);
-                target.setDead(true);
+            // Check for status effects
+            if (hasEffect) {
+                System.out.println(target + " has been " + this.effect + "!");
+                target.setEffect(this.effect);
             }
+
+            // Resolving damage done
+            if (MAX_DAMAGE > 0) {
+                System.out.println(this.name + " dealt " + damage + " damage to " + target);
+
+                if (damage < target.getCurrentHP()) {
+                    target.setCurrentHP(target.getCurrentHP() - damage);
+                    System.out.println(target + " is now at " + target.getCurrentHP() + "/" + target.getStartingHP() + " HP.");
+                } else {
+                    System.out.println(target + " has been defeated!");
+                    if (target.isEquipped()) target.lootCharacter(character);
+                    enemyParty.removeCharacter(target);
+                    target.setDead(true);
+                }
+            }
+
         } else {
             System.out.println(character.getName() + " missed!");
         }
@@ -61,11 +91,7 @@ public abstract class Attack {
     }
 
 
-    private GameCharacter pickTarget(Party enemyParty) {
-        if (enemyParty.getCharacters().size() == 1) {
-            return enemyParty.getCharacter(0);
-        }
-
+    private int pickTarget(Party enemyParty) {
         Scanner scanner = new Scanner(System.in);
 
         // Printing out numbered list of targets
@@ -74,8 +100,8 @@ public abstract class Attack {
             int listNumber = i + 1;
             System.out.println(listNumber + ". " + enemyParty.getCharacters().get(i).getCharacterReport());
         }
-        int indexOfChoice = scanner.nextInt() - 1;
-        return enemyParty.getCharacter(indexOfChoice);
+        System.out.println("0. Go back");
+        return scanner.nextInt();
     }
 
     private GameCharacter pickTargetComputer(Party enemyParty) {

@@ -21,7 +21,8 @@ public abstract class Defense {
     public int activate(DamageType damageType) {
         Random random = new Random();
         if (random.nextDouble() < SUCCES_RATE
-                && (this.protectedDamageType.equals(damageType) || protectedDamageType.equals(DamageType.ALL))) {
+                && (this.protectedDamageType.equals(damageType)
+                || protectedDamageType.equals(DamageType.ALL))) {
             System.out.println(description);
             return calculateDamageReduction();
         } else {
@@ -33,4 +34,7 @@ public abstract class Defense {
     public int calculateDamageReduction() {
         return 0;
     }
+
 }
+
+

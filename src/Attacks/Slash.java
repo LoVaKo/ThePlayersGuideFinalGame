@@ -5,7 +5,9 @@ public class Slash extends Attack {
         super("Slash",
                 DamageType.NORMAL,
                 1.0,
-                2);
+                2,
+                null,
+                false);
     }
 
     @Override

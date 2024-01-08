@@ -102,7 +102,7 @@ public class Game {
                     break;
                 case 2:
                     heroParty.addCharacter(new VinFletcher(heroParty, monsterParty));
-                    System.out.println("Vin Fletches has been added to the hero party!");
+                    System.out.println("Vin Fletcher has been added to the hero party!");
                     break;
             }
 

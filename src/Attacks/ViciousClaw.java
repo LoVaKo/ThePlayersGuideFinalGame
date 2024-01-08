@@ -7,7 +7,9 @@ public class ViciousClaw extends Attack {
         super("Vicious Claw",
                 DamageType.NORMAL,
                 1.0,
-                5);
+                5,
+                null,
+                false);
     }
 
     @Override

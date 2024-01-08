@@ -1,5 +1,6 @@
 package GameCharacters;
 
+import ActionHandler.ActionMenu;
 import Attacks.Attack;
 import Defenses.Defense;
 import Inventory.Gear;
@@ -7,6 +8,7 @@ import Inventory.HealthPotion;
 import Inventory.Inventory;
 import Inventory.InventoryItem;
 import Main.Party;
+import StatusEffects.StatusEffect;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -19,6 +21,7 @@ public abstract class GameCharacter {
     protected final int startingHP;
     protected Party enemyParty;
     protected int currentHP;
+    protected StatusEffect effect;
     protected Inventory equippedItems = new Inventory();
     private boolean isDead;
 
@@ -33,7 +36,7 @@ public abstract class GameCharacter {
         this.startingHP = hP;
         this.currentHP = startingHP;
         this.isDead = false;
-
+        this.effect = null;
     }
 
     // ACTIONS
@@ -62,19 +65,26 @@ public abstract class GameCharacter {
         Inventory inventory = this.getOwnParty().getInventory();
 
         // Printing out current inventory
+        System.out.println("Which item would you like to use?");
         System.out.println("Items in inventory: ");
         for (int i = 0; i < inventory.getItems().size(); i++) {
             int index = i + 1;
             System.out.println(index + ". " + inventory.getItems().get(i).toString());
         }
+        System.out.println("0. Go Back");
 
         // Picking item
-        System.out.println("Which item would you like to use?");
         int userInput = scanner.nextInt();
         scanner.nextLine();
 
-        inventory.getItems().get(userInput - 1).useItem(this, inventory); // userInput - 1 corresponds to the index in inventory
-
+        if (userInput == 0) {
+            // If player picked 0, go back to ActionMenu
+            ActionMenu menu = new ActionMenu(this);
+            menu.print();
+            menu.pickAction();
+        } else {
+            inventory.getItems().get(userInput - 1).useItem(this, inventory); // userInput - 1 corresponds to the index in inventory
+        }
     }
 
     public void useHealthPotion() {
@@ -190,6 +200,14 @@ public abstract class GameCharacter {
         return this.defense != null;
     }
 
+    public StatusEffect getEffect() {
+        return effect;
+    }
+
+    public void setEffect(StatusEffect effect) {
+        this.effect = effect;
+    }
+
     // Other
     public String printCharacterInformation() {
         return "";
@@ -202,6 +220,19 @@ public abstract class GameCharacter {
 
     public boolean isEquipped() {
         return !equippedItems.getItems().isEmpty();
+    }
+
+    public boolean hasEffect() {
+        return this.effect != null;
+    }
+
+    public void checkForStatusEffect() {
+        if (this.hasEffect()) {
+            System.out.println(this.name + " is " + this.effect.getName() + "!");
+            System.out.println(this.effect.getDescription());
+            System.out.println("Remaining number of rounds: " + this.effect.getNumOfRounds());
+            System.out.println();
+        }
     }
 
 }

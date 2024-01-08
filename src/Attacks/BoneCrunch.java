@@ -7,7 +7,9 @@ public class BoneCrunch extends Attack {
         super("Bone Crunch",
                 DamageType.NORMAL,
                 1.0,
-                1);
+                1,
+                null,
+                false);
     }
 
     @Override

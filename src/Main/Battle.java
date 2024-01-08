@@ -34,10 +34,12 @@ public class Battle {
 
         while (characterIterator.hasNext() && !allEnemiesDefeated && !game.gameOver) {
 
+            // Setting up current character
             setCurrentCharacter(characterIterator.next());
             battleReport();
             System.out.println();
             System.out.println("Its " + getCurrentCharacter() + "'s turn...");
+            getCurrentCharacter().checkForStatusEffect();
 
             // Player picks action or computer picks action.
             if (isComputerPlayer()) {
@@ -52,6 +54,17 @@ public class Battle {
             // Checking to see if any characters need to be removed from characterOrder
             if (getCurrentCharacter().getIsDead()) {
                 characterIterator.remove();
+            }
+
+            // Updating all character status effects
+            ArrayList<GameCharacter> allCharacters = new ArrayList<>();
+            allCharacters.addAll(currentParty.getCharacters());
+            allCharacters.addAll(currentEnemy.getCharacters());
+
+            for (GameCharacter character : allCharacters) {
+                if (character.getEffect() != null) {
+                    character.getEffect().endRound(character);
+                }
             }
 
             // Checking to see if all enemies are defeated and battle should end

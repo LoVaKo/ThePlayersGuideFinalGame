@@ -6,7 +6,9 @@ public class QuickShot extends Attack {
         super("Quick Shot",
                 DamageType.NORMAL,
                 0.5,
-                3);
+                3,
+                null,
+                false);
     }
 
     @Override

@@ -2,7 +2,7 @@ package Defenses;
 
 import Attacks.DamageType;
 
-public class ObjectSight extends Defense{
+public class ObjectSight extends Defense {
     public ObjectSight() {
         super("Object Sight",
                 "The Coding attack was spotted! Object sight lessened the impact of the attack.",

@@ -7,7 +7,9 @@ public class UnravelingAttack extends Attack {
         super("Unraveling Attack",
                 DamageType.DECODING,
                 1.0,
-                4);
+                4,
+                null,
+                false);
     }
 
     @Override
