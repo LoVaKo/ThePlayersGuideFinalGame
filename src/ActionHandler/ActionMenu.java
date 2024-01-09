@@ -11,18 +11,19 @@ public class ActionMenu {
     ArrayList<Action> actionArrayList = new ArrayList<>();
     ArrayList<String> stringList = new ArrayList<>();
     ArrayList<String> printableList = new ArrayList<>();
-    ArrayList<GameCharacter> characterOrder;
 
     public ActionMenu(GameCharacter currentCharacter) {
         this.currentCharacter = currentCharacter;
-        this.characterOrder = characterOrder;
 
         // Always add standard attack option
-        actionArrayList.add(currentCharacter::standardAttack);
-        stringList.add("Standard attack: " + currentCharacter.getAttack().getName());
-
-        // If character has gear equipped, add gear based attack option
-        if (currentCharacter.isEquipped()) {
+        // Exception: Status effect Blinded
+        if (!currentCharacter.isBlinded()) {
+            actionArrayList.add(currentCharacter::standardAttack);
+            stringList.add("Standard attack: " + currentCharacter.getAttack().getName());
+        }
+        // If character has gear equipped and is NOT Blinded, add Gear based Attack option
+        if (currentCharacter.isEquipped() &&
+                !currentCharacter.isBlinded()) {
             Gear currentGear = (Gear) currentCharacter.getEquippedItems().getItems().get(0);
             actionArrayList.add(currentCharacter::gearBasedAttack);
             stringList.add(currentGear.toString() + " attack: " + currentGear.getAttack().toString());

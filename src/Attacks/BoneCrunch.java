@@ -1,5 +1,7 @@
 package Attacks;
 
+import StatusEffects.Blinded;
+
 import java.util.Random;
 
 public class BoneCrunch extends Attack {
@@ -8,8 +10,8 @@ public class BoneCrunch extends Attack {
                 DamageType.NORMAL,
                 1.0,
                 1,
-                null,
-                false);
+                new Blinded(),
+                true);
     }
 
     @Override

@@ -56,15 +56,9 @@ public class Battle {
                 characterIterator.remove();
             }
 
-            // Updating all character status effects
-            ArrayList<GameCharacter> allCharacters = new ArrayList<>();
-            allCharacters.addAll(currentParty.getCharacters());
-            allCharacters.addAll(currentEnemy.getCharacters());
-
-            for (GameCharacter character : allCharacters) {
-                if (character.getEffect() != null) {
-                    character.getEffect().endRound(character);
-                }
+            // If current character has a Status Effect, handle end round for status effects.
+            if (currentCharacter.hasEffect()) {
+                currentCharacter.getEffect().endRound(currentCharacter);
             }
 
             // Checking to see if all enemies are defeated and battle should end
@@ -81,6 +75,7 @@ public class Battle {
                 System.out.println("\nPress ENTER to continue");
                 scanner.nextLine();
             }
+
             // End battle if all enemies are defeated
             if (allEnemiesDefeated) break;
 

@@ -3,6 +3,7 @@ package Attacks;
 import ActionHandler.ActionMenu;
 import GameCharacters.GameCharacter;
 import Main.Party;
+import StatusEffects.CoolDown;
 import StatusEffects.StatusEffect;
 
 import java.util.Random;
@@ -63,10 +64,14 @@ public abstract class Attack {
                 }
             }
 
-            // Check for status effects
+            // Check if the attack comes with a status effect and weather the character already has an effect
             if (hasEffect) {
-                System.out.println(target + " has been " + this.effect + "!");
-                target.setEffect(this.effect);
+                if (!target.hasEffect()) {
+                    System.out.println(target + " has been " + this.effect + "!");
+                    target.setEffect(this.effect);
+                } else if (target.getEffect() instanceof CoolDown) {
+                    ((CoolDown) target.getEffect()).checkForCooldown(effect, target);
+                }
             }
 
             // Resolving damage done

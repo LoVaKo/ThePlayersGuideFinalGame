@@ -70,41 +70,39 @@ public class Game {
         Scanner scanner = new Scanner(System.in);
 
         // Printing out available heroes
-        System.out.println(new TrueProgrammer("name", heroParty, monsterParty).printCharacterInformation());
+        System.out.println(new Walt(heroParty, monsterParty).printCharacterInformation());
         System.out.println(new VinFletcher(heroParty, monsterParty).printCharacterInformation());
 
         // Adding heroes to party
         boolean finishedAdding = false;
 
-        while (heroParty.getCharacters().size() < 4 && !finishedAdding) {
+        while (heroParty.getCharacters().size() < 5 && !finishedAdding) {
             System.out.println("""
                     \nPlease choose a hero to add to your party:
-                    1. The True Programmer
+                    1. Walt
                     2. Vin Fletcher
                     """);
-            int chosenHero = scanner.nextInt();
-            scanner.nextLine();
+            GameCharacter chosenHero = null;
+            int chosenHeroNum = -1;
 
-            switch (chosenHero) {
-                case 1:
-                    System.out.println("What will the name of The True Programmer be?");
-                    String name = scanner.nextLine();
-
-                    if (name.equalsIgnoreCase("Walt")) {
-                        System.out.println(new Walt(heroParty, monsterParty).printCharacterInformation());
-                        heroParty.addCharacter(new Walt(heroParty, monsterParty));
-                        System.out.println("Walt has been added to the hero party!");
-                    } else {
-                        heroParty.addCharacter(new TrueProgrammer(name, heroParty, monsterParty));
-                        System.out.println(name + " has been added to the hero party!");
-                    }
-
-                    break;
-                case 2:
-                    heroParty.addCharacter(new VinFletcher(heroParty, monsterParty));
-                    System.out.println("Vin Fletcher has been added to the hero party!");
-                    break;
+            while (chosenHeroNum < 0 || chosenHeroNum > 3) {
+                if (scanner.hasNextInt() &&
+                        scanner.nextInt() > 0 && scanner.nextInt() < 3) {
+                    chosenHeroNum = scanner.nextInt();
+                    scanner.nextLine();
+                } else {
+                    System.out.println("Please pick a number from the character list.");
+                }
             }
+
+            switch (chosenHeroNum) {
+                case 1 -> chosenHero = new Walt(heroParty, monsterParty);
+                case 2 -> chosenHero = new VinFletcher(heroParty, monsterParty);
+            }
+
+            heroParty.addCharacter(chosenHero);
+            assert chosenHero != null;
+            System.out.println(chosenHero.getName() + " has been added to the hero party!");
 
             System.out.println("\nCurrent party:");
             for (GameCharacter character : heroParty.getCharacters()) {

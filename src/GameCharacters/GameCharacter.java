@@ -8,6 +8,8 @@ import Inventory.HealthPotion;
 import Inventory.Inventory;
 import Inventory.InventoryItem;
 import Main.Party;
+import StatusEffects.Blinded;
+import StatusEffects.CoolDown;
 import StatusEffects.StatusEffect;
 
 import java.util.ArrayList;
@@ -142,6 +144,11 @@ public abstract class GameCharacter {
         character.getOwnParty().getInventory().getItems().add(equippedGear);
     }
 
+    // Status Effects
+    public boolean isBlinded() {
+        return this.effect instanceof Blinded;
+    }
+
 
     // Getters and setters
     public int getCurrentHP() {
@@ -177,11 +184,15 @@ public abstract class GameCharacter {
     }
 
     public String getCharacterReport() {
-        if (isEquipped()) {
-            return getName() + " with " + equippedItems.getItems().get(0).toString() + " (" + getCurrentHP() + "/" + getStartingHP() + ")";
-        }
+        StringBuilder report = new StringBuilder();
 
-        return getName() + "(" + getCurrentHP() + "/" + getStartingHP() + ")";
+        report.append(getName()); // Name
+        if (isEquipped()) report.append(" with ").append(equippedItems.getItems().get(0).toString()); // Equipped with
+        report.append(" (").append(getCurrentHP()).append("/").append(getStartingHP()).append(")"); // HP
+        if (hasEffect() && !(getEffect() instanceof CoolDown))
+            report.append(">").append(getEffect().getName()).append("<");
+
+        return report.toString();
     }
 
     public Party getOwnParty() {
@@ -227,7 +238,8 @@ public abstract class GameCharacter {
     }
 
     public void checkForStatusEffect() {
-        if (this.hasEffect()) {
+        if (this.hasEffect() &&
+                !(this.effect instanceof CoolDown)) {
             System.out.println(this.name + " is " + this.effect.getName() + "!");
             System.out.println(this.effect.getDescription());
             System.out.println("Remaining number of rounds: " + this.effect.getNumOfRounds());

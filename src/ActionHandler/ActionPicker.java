@@ -24,27 +24,33 @@ public class ActionPicker {
             currentCharacter.equipGearComputer();
         } else if (shouldUseGearAttack()) {
             currentCharacter.gearBasedAttackComputer();
-        } else {
+        } else if (shouldUseStandardAttack()) {
             currentCharacter.standardAttackComputer();
+        } else {
+            currentCharacter.doNothing();
         }
     }
 
-    public boolean shouldUseHealthPotion() {
+    private boolean shouldUseHealthPotion() {
         int chanceToUseHealthPotion = 25;
         return currentCharacter.getCurrentHP() <= currentCharacter.getStartingHP() / 2
                 && currentParty.getInventory().hasHealthPotion()
                 && random.nextInt(100) + 1 <= chanceToUseHealthPotion;
     }
 
-    public boolean shouldEquipGear() {
+    private boolean shouldEquipGear() {
         int chanceToEquipGear = 50;
         return !currentCharacter.isEquipped()
                 && currentCharacter.getOwnParty().getInventory().hasGear()
                 && random.nextInt(100) + 1 < chanceToEquipGear;
     }
 
-    public boolean shouldUseGearAttack() {
+    private boolean shouldUseGearAttack() {
         return currentCharacter.isEquipped()
                 && currentCharacter.getAttack().MAX_DAMAGE < currentCharacter.getEquippedGear().getAttack().MAX_DAMAGE;
+    }
+
+    private boolean shouldUseStandardAttack() {
+        return !currentCharacter.isBlinded();
     }
 }
