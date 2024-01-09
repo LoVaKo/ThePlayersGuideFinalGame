@@ -1,6 +1,6 @@
 package GameCharacters.Monsters;
 
-import Attacks.BoneCrunch;
+import Attacks.Basic.BoneCrunch;
 
 public class Skeleton extends Monster {
 

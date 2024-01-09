@@ -1,6 +1,7 @@
 package GameCharacters.Monsters;
 
-import Attacks.Attack;
+import Attacks.Basic.BasicAttack;
+import Attacks.Special.SpecialAttack;
 import Defenses.Defense;
 import GameCharacters.GameCharacter;
 import Inventory.Dagger;
@@ -12,9 +13,10 @@ public abstract class Monster extends GameCharacter {
     private static final Party monsterParty = new Party();
     final int level;
 
-    public Monster(String name, Attack attack, Defense defense, int hP, int level) {
-        super(name,
-                attack,
+    public Monster(String name, BasicAttack basicAttack, SpecialAttack specialAttack, Defense defense, int hP, int level) {
+        super(  name,
+                basicAttack,
+                specialAttack,
                 defense,
                 monsterParty,
                 GameCharacters.Heroes.Hero.getHeroParty(),

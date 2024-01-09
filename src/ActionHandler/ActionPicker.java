@@ -47,7 +47,7 @@ public class ActionPicker {
 
     private boolean shouldUseGearAttack() {
         return currentCharacter.isEquipped()
-                && currentCharacter.getAttack().MAX_DAMAGE <= currentCharacter.getEquippedGear().getAttack().MAX_DAMAGE
+                && currentCharacter.getStandardAttack().MAX_DAMAGE <= currentCharacter.getEquippedGear().getAttack().MAX_DAMAGE
                 && !currentCharacter.isBlinded();
     }
 

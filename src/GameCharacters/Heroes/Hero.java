@@ -1,6 +1,8 @@
 package GameCharacters.Heroes;
 
 import Attacks.Attack;
+import Attacks.Basic.BasicAttack;
+import Attacks.Special.SpecialAttack;
 import Defenses.Defense;
 import GameCharacters.GameCharacter;
 import Inventory.HealthPotion;
@@ -11,9 +13,10 @@ import java.util.Scanner;
 public abstract class Hero extends GameCharacter {
     private static final Party heroParty = new Party();
 
-    public Hero(String name, Attack attack, Defense defense, int hP) {
-        super(name,
-                attack,
+    public Hero(String name, BasicAttack basicAttack, SpecialAttack specialAttack, Defense defense, int hP) {
+        super(  name,
+                basicAttack,
+                specialAttack,
                 defense,
                 heroParty,
                 GameCharacters.Monsters.Monster.getMonsterParty(),

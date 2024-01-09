@@ -2,6 +2,8 @@ package GameCharacters;
 
 import ActionHandler.ActionMenu;
 import Attacks.Attack;
+import Attacks.Basic.BasicAttack;
+import Attacks.Special.SpecialAttack;
 import Defenses.Defense;
 import Inventory.Gear;
 import Inventory.HealthPotion;
@@ -17,7 +19,8 @@ import java.util.Scanner;
 
 public abstract class GameCharacter {
     protected final String name;
-    protected final Attack attack;
+    protected final BasicAttack basicAttack;
+    protected final SpecialAttack specialAttack;
     protected final Defense defense;
     protected final Party ownParty;
     protected final int startingHP;
@@ -29,9 +32,10 @@ public abstract class GameCharacter {
 
 
     // Constructor
-    public GameCharacter(String name, Attack attack, Defense defense, Party ownParty, Party enemyParty, int hP) {
+    public GameCharacter(String name, BasicAttack basicAttack, SpecialAttack specialAttack, Defense defense, Party ownParty, Party enemyParty, int hP) {
         this.name = name;
-        this.attack = attack;
+        this.basicAttack = basicAttack;
+        this.specialAttack = specialAttack;
         this.defense = defense;
         this.ownParty = ownParty;
         this.enemyParty = enemyParty;
@@ -43,7 +47,7 @@ public abstract class GameCharacter {
 
     // ACTIONS
     public void standardAttack() {
-        attack.useAttack(this, this.enemyParty, false);
+        basicAttack.useAttack(this, this.enemyParty, false);
     }
 
     public void gearBasedAttack() {
@@ -51,7 +55,7 @@ public abstract class GameCharacter {
     }
 
     public void standardAttackComputer() {
-        attack.useAttack(this, this.enemyParty, true);
+        basicAttack.useAttack(this, this.enemyParty, true);
     }
 
     public void gearBasedAttackComputer() {
@@ -179,8 +183,8 @@ public abstract class GameCharacter {
         return name;
     }
 
-    public Attack getAttack() {
-        return attack;
+    public Attack getStandardAttack() {
+        return basicAttack;
     }
 
     public String getCharacterReport() {

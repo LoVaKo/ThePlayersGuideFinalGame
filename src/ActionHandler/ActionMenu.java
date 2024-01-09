@@ -19,7 +19,7 @@ public class ActionMenu {
         // Exception: Status effect Blinded
         if (!currentCharacter.isBlinded()) {
             actionArrayList.add(currentCharacter::standardAttack);
-            stringList.add("Standard attack: " + currentCharacter.getAttack().getName());
+            stringList.add("Standard attack: " + currentCharacter.getStandardAttack().getName());
         }
         // If character has gear equipped and is NOT Blinded, add Gear based Attack option
         if (currentCharacter.isEquipped() &&

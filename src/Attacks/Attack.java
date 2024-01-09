@@ -1,6 +1,7 @@
 package Attacks;
 
 import ActionHandler.ActionMenu;
+import Attacks.Special.SpecialAttack;
 import GameCharacters.GameCharacter;
 import Main.Party;
 import StatusEffects.CoolDown;
@@ -12,17 +13,15 @@ import java.util.Scanner;
 public abstract class Attack {
     public final int MAX_DAMAGE;
     private final double SUCCESS_RATE;
-    private final StatusEffect effect;
     private final boolean hasEffect;
     protected String name;
     protected DamageType damageType;
 
-    public Attack(String name, DamageType damageType, double successRate, int MAX_DAMAGE, StatusEffect effect, boolean hasEffect) {
+    public Attack(String name, DamageType damageType, double successRate, int MAX_DAMAGE, boolean hasEffect) {
         this.name = name;
         this.damageType = damageType;
         this.SUCCESS_RATE = successRate;
         this.MAX_DAMAGE = MAX_DAMAGE;
-        this.effect = effect;
         this.hasEffect = hasEffect;
     }
 
@@ -66,12 +65,7 @@ public abstract class Attack {
 
             // Check if the attack comes with a status effect and weather the character already has an effect
             if (hasEffect) {
-                if (!target.hasEffect()) {
-                    System.out.println(target + " has been " + this.effect + "!");
-                    target.setEffect(this.effect);
-                } else if (target.getEffect() instanceof CoolDown) {
-                    ((CoolDown) target.getEffect()).checkForCooldown(effect, target);
-                }
+                SpecialAttack.resolveEffect(target, (SpecialAttack) this);
             }
 
             // Resolving damage done

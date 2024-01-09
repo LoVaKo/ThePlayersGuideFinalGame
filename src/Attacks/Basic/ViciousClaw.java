@@ -1,15 +1,15 @@
-package Attacks;
+package Attacks.Basic;
+
+import Attacks.DamageType;
 
 import java.util.Random;
 
-public class ViciousClaw extends Attack {
+public class ViciousClaw extends BasicAttack {
     public ViciousClaw() {
         super("Vicious Claw",
                 DamageType.NORMAL,
                 1.0,
-                5,
-                null,
-                false);
+                5);
     }
 
     @Override

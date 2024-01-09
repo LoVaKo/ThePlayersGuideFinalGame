@@ -1,6 +1,6 @@
 package Inventory;
 
-import Attacks.QuickShot;
+import Attacks.Special.QuickShot;
 
 public class VinsBow extends Gear {
     public VinsBow() {

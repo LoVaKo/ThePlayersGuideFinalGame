@@ -1,6 +1,6 @@
 package Inventory;
 
-import Attacks.Stab;
+import Attacks.Basic.Stab;
 
 public class Dagger extends Gear {
     public Dagger() {

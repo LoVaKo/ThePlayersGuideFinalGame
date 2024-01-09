@@ -1,6 +1,6 @@
 package GameCharacters.Heroes;
 
-import Attacks.Punch;
+import Attacks.Basic.Punch;
 import Inventory.VinsBow;
 
 public class VinFletcher extends Hero {

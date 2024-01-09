@@ -1,16 +1,15 @@
-package Attacks;
+package Attacks.Basic;
 
-import StatusEffects.Blinded;
+import Attacks.Basic.BasicAttack;
+import Attacks.DamageType;
 
-public class Punch extends Attack {
+public class Punch extends BasicAttack {
 
     public Punch() {
         super("Punch",
                 DamageType.NORMAL,
                 1.0,
-                1,
-                new Blinded(),
-                true);
+                1);
     }
 
     @Override

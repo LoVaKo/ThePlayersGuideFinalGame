@@ -1,6 +1,6 @@
 package GameCharacters.Heroes;
 
-import Attacks.ViciousClaw;
+import Attacks.Basic.ViciousClaw;
 import Defenses.FurCoat;
 
 public class Walt extends Hero {

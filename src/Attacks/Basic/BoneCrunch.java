@@ -1,17 +1,16 @@
-package Attacks;
+package Attacks.Basic;
 
-import StatusEffects.Blinded;
+import Attacks.Basic.BasicAttack;
+import Attacks.DamageType;
 
 import java.util.Random;
 
-public class BoneCrunch extends Attack {
+public class BoneCrunch extends BasicAttack {
     public BoneCrunch() {
         super("Bone Crunch",
                 DamageType.NORMAL,
                 0.9,
-                3,
-                new Blinded(),
-                true);
+                3);
     }
 
     @Override
