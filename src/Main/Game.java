@@ -1,14 +1,17 @@
 package Main;
 
-import GameCharacters.*;
+import GameCharacters.GameCharacter;
+import GameCharacters.Heroes.VinFletcher;
+import GameCharacters.Heroes.Walt;
+import GameCharacters.Monsters.Skeleton;
 import Inventory.Dagger;
 import Inventory.HealthPotion;
 
 import java.util.Scanner;
 
 public class Game {
-    private final Party heroParty = new Party();
-    private final Party monsterParty = new Party();
+    private final Party heroParty = GameCharacters.Heroes.Hero.getHeroParty();
+    private final Party monsterParty = GameCharacters.Monsters.Monster.getMonsterParty();
     public boolean gameOver = false;
     public GameMode gameMode;
     private int numOfBattles = 0;
@@ -19,11 +22,11 @@ public class Game {
         this.gameMode = gameMode;
     }
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
         // Setting GameMode
-        GameMode gameMode;
+        GameMode gameMode = null;
         System.out.println("""
                 Welcome to the final battle. Pick a game mode:
                  1. Player VS Computer
@@ -37,7 +40,6 @@ public class Game {
             case 1 -> gameMode = GameMode.PLAYER_VS_COMPUTER;
             case 2 -> gameMode = GameMode.COMPUTER_VS_COMPUTER;
             case 3 -> gameMode = GameMode.PLAYER_VS_PLAYER;
-            default -> gameMode = GameMode.PLAYER_VS_COMPUTER;
         }
 
         System.out.println("Game mode set to: " + gameMode);
@@ -56,7 +58,7 @@ public class Game {
             // End game if heroes were defeated in the last round OR boss has been defeated
             if (game.numOfBattles == 3 && game.monsterParty.isEmpty()) {
                 System.out.println();
-                System.out.println("The Uncoded One has finally been defeated! The heroes win.");
+                System.out.println("All enemies have finally been defeated! The heroes win.");
                 game.gameOver = true;
             }
             if (game.gameOver) break;
@@ -70,8 +72,8 @@ public class Game {
         Scanner scanner = new Scanner(System.in);
 
         // Printing out available heroes
-        System.out.println(new Walt(heroParty, monsterParty).printCharacterInformation());
-        System.out.println(new VinFletcher(heroParty, monsterParty).printCharacterInformation());
+        System.out.println(Walt.printCharacterInformation());
+        System.out.println(VinFletcher.printCharacterInformation());
 
         // Adding heroes to party
         boolean finishedAdding = false;
@@ -85,23 +87,28 @@ public class Game {
             GameCharacter chosenHero = null;
             int chosenHeroNum = -1;
 
-            while (chosenHeroNum < 0 || chosenHeroNum > 3) {
-                if (scanner.hasNextInt() &&
-                        scanner.nextInt() > 0 && scanner.nextInt() < 3) {
+            while (chosenHeroNum < 0) {
+                if (scanner.hasNextInt()) {
                     chosenHeroNum = scanner.nextInt();
-                    scanner.nextLine();
+                    scanner.nextLine(); // Consume the newline character
+
+                    if (chosenHeroNum >= 1 && chosenHeroNum <= 2) {
+                        // Process the chosen hero
+                        if (chosenHeroNum == 1) {
+                            chosenHero = new Walt();
+                        } else if (chosenHeroNum == 2) {
+                            chosenHero = new VinFletcher();
+                        }
+                    } else {
+                        System.out.println("Please pick a number from the character list.");
+                        chosenHeroNum = -1;
+                    }
                 } else {
-                    System.out.println("Please pick a number from the character list.");
+                    System.out.println("Invalid input. Please enter a number.");
+                    scanner.nextLine();
                 }
             }
 
-            switch (chosenHeroNum) {
-                case 1 -> chosenHero = new Walt(heroParty, monsterParty);
-                case 2 -> chosenHero = new VinFletcher(heroParty, monsterParty);
-            }
-
-            heroParty.addCharacter(chosenHero);
-            assert chosenHero != null;
             System.out.println(chosenHero.getName() + " has been added to the hero party!");
 
             System.out.println("\nCurrent party:");
@@ -123,166 +130,45 @@ public class Game {
     }
 
     public void setupMonsterParty(int numOfHeroes) {
-        switch (numOfHeroes) {
+        int numOfSkeletons = 0;
+        int numOfHealthPotions = 0;
+        int numOfDaggers = 0;
+
+        switch (this.numOfBattles) {
+            case 0:
+                numOfSkeletons = numOfHeroes;
+                numOfHealthPotions = 1;
+                numOfDaggers = numOfHeroes;
+                break;
             case 1:
-                if (this.numOfBattles == 0) {
-                    // Adding characters
-                    Skeleton skeleton1 = new Skeleton(monsterParty, heroParty);
-                    monsterParty.addCharacter(skeleton1);
-
-                    // Equipping gear
-                    skeleton1.getEquippedItems().addItem(new Dagger());
-
-                    // Adding inventory items
-                    monsterParty.addInventoryItem(new HealthPotion());
-
-                } else if (this.numOfBattles == 1) {
-                    // Adding monsters
-                    monsterParty.addCharacter(new Skeleton(monsterParty, heroParty));
-                    monsterParty.addCharacter(new Skeleton(monsterParty, heroParty));
-
-                    // Adding inventoryItems
-                    monsterParty.addInventoryItem(new HealthPotion());
-                    monsterParty.addInventoryItem(new Dagger());
-                    monsterParty.addInventoryItem(new Dagger());
-
-                } else if (this.numOfBattles == 2) {
-                    // Adding end boss
-                    monsterParty.addCharacter(new TheUncodedOne(monsterParty, heroParty));
-
-                    // Adding inventoryitems
-                    monsterParty.addInventoryItem(new HealthPotion());
-                }
+                numOfSkeletons = (int) Math.ceil(numOfHeroes * 1.5);
+                numOfHealthPotions = 2;
+                numOfDaggers = numOfSkeletons;
                 break;
             case 2:
-                if (this.numOfBattles == 0) {
-                    // Adding characters
-                    Skeleton skeleton1 = new Skeleton(monsterParty, heroParty);
-                    monsterParty.addCharacter(new Skeleton(monsterParty, heroParty));
-                    monsterParty.addCharacter(skeleton1);
-
-                    // Equipping gear
-                    skeleton1.getEquippedItems().addItem(new Dagger());
-
-                    // Adding inventory items
-                    monsterParty.addInventoryItem(new HealthPotion());
-
-                } else if (this.numOfBattles == 1) {
-                    // Adding monsters
-                    monsterParty.addCharacter(new Skeleton(monsterParty, heroParty));
-                    monsterParty.addCharacter(new Skeleton(monsterParty, heroParty));
-                    monsterParty.addCharacter(new Skeleton(monsterParty, heroParty));
-
-                    // Adding inventoryItems
-                    monsterParty.addInventoryItem(new HealthPotion());
-                    monsterParty.addInventoryItem(new HealthPotion());
-                    monsterParty.addInventoryItem(new Dagger());
-                    monsterParty.addInventoryItem(new Dagger());
-                    monsterParty.addInventoryItem(new Dagger());
-
-                } else if (this.numOfBattles == 2) {
-                    // Adding end boss
-                    monsterParty.addCharacter(new TheUncodedOne(monsterParty, heroParty));
-                    monsterParty.addCharacter(new Skeleton(monsterParty, heroParty));
-
-                    // Adding inventoryitems
-                    monsterParty.addInventoryItem(new HealthPotion());
-                    monsterParty.addInventoryItem(new HealthPotion());
-                    monsterParty.addInventoryItem(new Dagger());
-                }
+                numOfSkeletons = numOfHeroes * 2;
+                numOfHealthPotions = 3;
+                numOfDaggers = numOfSkeletons;
                 break;
-            case 3:
-                if (this.numOfBattles == 0) {
-                    // Adding characters
-                    Skeleton skeleton1 = new Skeleton(monsterParty, heroParty);
-                    monsterParty.addCharacter(new Skeleton(monsterParty, heroParty));
-                    monsterParty.addCharacter(new Skeleton(monsterParty, heroParty));
-                    monsterParty.addCharacter(skeleton1);
-
-                    // Equipping gear
-                    skeleton1.getEquippedItems().addItem(new Dagger());
-
-                    // Adding inventory items
-                    monsterParty.addInventoryItem(new HealthPotion());
-
-                } else if (this.numOfBattles == 1) {
-                    // Adding monsters
-                    monsterParty.addCharacter(new Skeleton(monsterParty, heroParty));
-                    monsterParty.addCharacter(new Skeleton(monsterParty, heroParty));
-                    monsterParty.addCharacter(new Skeleton(monsterParty, heroParty));
-                    monsterParty.addCharacter(new Skeleton(monsterParty, heroParty));
-
-                    // Adding inventoryItems
-                    monsterParty.addInventoryItem(new HealthPotion());
-                    monsterParty.addInventoryItem(new HealthPotion());
-                    monsterParty.addInventoryItem(new Dagger());
-                    monsterParty.addInventoryItem(new Dagger());
-                    monsterParty.addInventoryItem(new Dagger());
-                    monsterParty.addInventoryItem(new Dagger());
-
-                } else if (this.numOfBattles == 2) {
-                    // Adding end boss
-                    monsterParty.addCharacter(new TheUncodedOne(monsterParty, heroParty));
-                    monsterParty.addCharacter(new Skeleton(monsterParty, heroParty));
-                    monsterParty.addCharacter(new Skeleton(monsterParty, heroParty));
-
-                    // Adding inventoryitems
-                    monsterParty.addInventoryItem(new HealthPotion());
-                    monsterParty.addInventoryItem(new HealthPotion());
-                    monsterParty.addInventoryItem(new Dagger());
-                    monsterParty.addInventoryItem(new Dagger());
-                }
-                break;
-            case 4:
-                if (this.numOfBattles == 0) {
-                    // Adding characters
-                    Skeleton skeleton1 = new Skeleton(monsterParty, heroParty);
-                    monsterParty.addCharacter(new Skeleton(monsterParty, heroParty));
-                    monsterParty.addCharacter(new Skeleton(monsterParty, heroParty));
-                    monsterParty.addCharacter(new Skeleton(monsterParty, heroParty));
-                    monsterParty.addCharacter(skeleton1);
-
-                    // Equipping gear
-                    skeleton1.getEquippedItems().addItem(new Dagger());
-
-                    // Adding inventory items
-                    monsterParty.addInventoryItem(new HealthPotion());
-
-                } else if (this.numOfBattles == 1) {
-                    // Adding monsters
-                    monsterParty.addCharacter(new Skeleton(monsterParty, heroParty));
-                    monsterParty.addCharacter(new Skeleton(monsterParty, heroParty));
-                    monsterParty.addCharacter(new Skeleton(monsterParty, heroParty));
-                    monsterParty.addCharacter(new Skeleton(monsterParty, heroParty));
-                    monsterParty.addCharacter(new Skeleton(monsterParty, heroParty));
-
-                    // Adding inventoryItems
-                    monsterParty.addInventoryItem(new HealthPotion());
-                    monsterParty.addInventoryItem(new HealthPotion());
-                    monsterParty.addInventoryItem(new Dagger());
-                    monsterParty.addInventoryItem(new Dagger());
-                    monsterParty.addInventoryItem(new Dagger());
-                    monsterParty.addInventoryItem(new Dagger());
-                    monsterParty.addInventoryItem(new Dagger());
-
-
-                } else if (this.numOfBattles == 2) {
-                    // Adding end boss
-                    monsterParty.addCharacter(new TheUncodedOne(monsterParty, heroParty));
-                    monsterParty.addCharacter(new Skeleton(monsterParty, heroParty));
-                    monsterParty.addCharacter(new Skeleton(monsterParty, heroParty));
-                    monsterParty.addCharacter(new Skeleton(monsterParty, heroParty));
-
-                    // Adding inventoryitems
-                    monsterParty.addInventoryItem(new HealthPotion());
-                    monsterParty.addInventoryItem(new HealthPotion());
-                    monsterParty.addInventoryItem(new Dagger());
-                    monsterParty.addInventoryItem(new Dagger());
-                    monsterParty.addInventoryItem(new Dagger());
-                }
+            default:
+                // Handle default case if needed
                 break;
         }
 
+        // Adding monsters
+        for (int i = 0; i < numOfSkeletons; i++) {
+            new Skeleton();
+        }
+
+        // Adding Health potions
+        for (int i = 0; i < numOfHealthPotions; i++) {
+            monsterParty.addInventoryItem(new HealthPotion());
+        }
+
+        // Adding Daggers
+        for (int i = 0; i < numOfDaggers; i++) {
+            monsterParty.addInventoryItem(new Dagger());
+        }
     }
 
     public void setNumOfBattles(int numberToAdd) {

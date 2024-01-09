@@ -1,24 +1,21 @@
-package GameCharacters;
+package GameCharacters.Heroes;
 
 import Attacks.ViciousClaw;
 import Defenses.FurCoat;
-import Main.Party;
 
-public class Walt extends GameCharacter {
+public class Walt extends Hero {
 
 
-    public Walt(Party ownParty, Party enemyParty) {
+    public Walt() {
         super("Walt",
                 new ViciousClaw(),
                 new FurCoat(),
-                ownParty,
-                enemyParty,
                 88);
     }
 
-    @Override
-    public String printCharacterInformation() {
-        String characterInformation = """
+
+    public static String printCharacterInformation() {
+        return """
                 \n================= Walt the Cat =================
                 ATTACK:             Vicious Claw (1-5)
                                     33 % chance for 5 damage
@@ -26,6 +23,5 @@ public class Walt extends GameCharacter {
                 HP:                 88
                 EXTRA:              Is PURRfect.
                 ================================================""";
-        return characterInformation;
     }
 }

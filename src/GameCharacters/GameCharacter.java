@@ -219,11 +219,6 @@ public abstract class GameCharacter {
         this.effect = effect;
     }
 
-    // Other
-    public String printCharacterInformation() {
-        return "";
-    }
-
     @Override
     public String toString() {
         return this.name;

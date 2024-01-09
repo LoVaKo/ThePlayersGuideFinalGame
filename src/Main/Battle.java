@@ -82,7 +82,7 @@ public class Battle {
             // Checking to see if all heroes are defeated and battle should end
             if (game.getHeroParty().isEmpty()) {
                 System.out.println();
-                System.out.println("All heroes have been defeated! The Uncoded One's forces have prevailed.");
+                System.out.println("All heroes have been defeated! The dark forces have prevailed.");
                 game.gameOver = true;
             }
             // End battle if all heroes are defeated

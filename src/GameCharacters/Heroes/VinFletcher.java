@@ -1,26 +1,22 @@
-package GameCharacters;
+package GameCharacters.Heroes;
 
 import Attacks.Punch;
 import Inventory.VinsBow;
-import Main.Party;
 
-public class VinFletcher extends GameCharacter {
+public class VinFletcher extends Hero {
 
-    public VinFletcher(Party ownParty, Party enemyParty) {
+    public VinFletcher() {
         super(
                 "Vin Fletcher",
                 new Punch(),
                 null,
-                ownParty,
-                enemyParty,
                 15);
 
         equippedItems.addItem(new VinsBow());
     }
 
-    @Override
-    public String printCharacterInformation() {
-        String characterInformation = """
+    public static String printCharacterInformation() {
+        return """
                 \n================= Vin Fletcher =================
                 ATTACK:             Punch (1 damage)
                 GEARBASED ATTACK:   Quickshot (3 damage)
@@ -28,6 +24,5 @@ public class VinFletcher extends GameCharacter {
                 HP:                 15
                 EXTRA:              Comes equipped with Vins Bow
                 ================================================""";
-        return characterInformation;
     }
 }
