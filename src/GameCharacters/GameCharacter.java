@@ -190,7 +190,7 @@ public abstract class GameCharacter {
         if (isEquipped()) report.append(" with ").append(equippedItems.getItems().get(0).toString()); // Equipped with
         report.append(" (").append(getCurrentHP()).append("/").append(getStartingHP()).append(")"); // HP
         if (hasEffect() && !(getEffect() instanceof CoolDown))
-            report.append(">").append(getEffect().getName()).append("<");
+            report.append(" >").append(getEffect().getName()).append("<");
 
         return report.toString();
     }

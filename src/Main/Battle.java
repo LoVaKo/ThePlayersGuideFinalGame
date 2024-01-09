@@ -38,7 +38,8 @@ public class Battle {
             setCurrentCharacter(characterIterator.next());
             battleReport();
             System.out.println();
-            System.out.println("Its " + getCurrentCharacter() + "'s turn...");
+            System.out.println("\u001B[34mIts " + getCurrentCharacter() + "'s turn...\u001B[0m");
+            System.out.println();
             getCurrentCharacter().checkForStatusEffect();
 
             // Player picks action or computer picks action.
@@ -72,7 +73,7 @@ public class Battle {
                 int ADD_BATTLE = 1;
                 game.setNumOfBattles(ADD_BATTLE);
 
-                System.out.println("\nPress ENTER to continue");
+                System.out.println("\n\u001B[34mPress ENTER to continue\u001B[0m");
                 scanner.nextLine();
             }
 
@@ -93,7 +94,7 @@ public class Battle {
                 characterIterator = characterOrder.iterator();
             }
 
-            System.out.println("\nPress ENTER to continue");
+            System.out.println("\n\u001B[1mPress ENTER to continue\u001B[0m");
             scanner.nextLine();
         }
     }

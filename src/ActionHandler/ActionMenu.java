@@ -55,10 +55,12 @@ public class ActionMenu {
     }
 
     public void print() {
-        System.out.println("Pick an action: ");
+        System.out.println("Pick an action ");
+        System.out.println("--------------------------------------");
         for (String string : printableList) {
             System.out.println(string);
         }
+        System.out.println("--------------------------------------");
     }
 
     public void pickAction() {

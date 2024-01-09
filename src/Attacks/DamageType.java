@@ -2,6 +2,6 @@ package Attacks;
 
 public enum DamageType {
     NORMAL,
-    DECODING,
+    RANGED,
     ALL
 }

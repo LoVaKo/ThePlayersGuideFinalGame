@@ -8,8 +8,8 @@ public class BoneCrunch extends Attack {
     public BoneCrunch() {
         super("Bone Crunch",
                 DamageType.NORMAL,
-                1.0,
-                1,
+                0.9,
+                3,
                 new Blinded(),
                 true);
     }
@@ -17,6 +17,6 @@ public class BoneCrunch extends Attack {
     @Override
     public int calculateAttackDamage() {
         Random random = new Random();
-        return random.nextInt(2);
+        return random.nextInt(3) + 1;
     }
 }
