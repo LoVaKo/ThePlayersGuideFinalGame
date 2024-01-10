@@ -1,6 +1,5 @@
 package Attacks.Basic;
 
-import Attacks.Basic.BasicAttack;
 import Attacks.DamageType;
 
 import java.util.Random;
@@ -8,7 +7,7 @@ import java.util.Random;
 public class BoneCrunch extends BasicAttack {
     public BoneCrunch() {
         super("Bone Crunch",
-                DamageType.NORMAL,
+                DamageType.PHYSICAL,
                 0.9,
                 3);
     }

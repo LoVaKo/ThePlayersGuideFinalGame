@@ -16,6 +16,7 @@ public class Battle {
     private Party currentParty;
     private Party currentEnemy;
     private boolean allEnemiesDefeated;
+    private final static CooldownManager cooldownManager = new CooldownManager();
 
     // Constructor
     public Battle(Game game) {
@@ -57,11 +58,6 @@ public class Battle {
                 characterIterator.remove();
             }
 
-            // If current character has a Status Effect, handle end round for status effects.
-            if (currentCharacter.hasEffect()) {
-                currentCharacter.getEffect().endRound(currentCharacter);
-            }
-
             // Checking to see if all enemies are defeated and battle should end
             if (currentEnemy.isEmpty()) {
                 System.out.println("\nAll enemies in this round have been defeated!");
@@ -89,8 +85,14 @@ public class Battle {
             // End battle if all heroes are defeated
             if (game.gameOver) break;
 
-            // If all characters have taken their turn, back to the first character
+            // If all characters have taken their turn, END ROUND
             if (!characterIterator.hasNext()) {
+
+                // Updating cooldowns
+                cooldownManager.updateCooldowns();
+                removeRedundantStatusEffects();
+
+                // Back to the first character in the iterator
                 characterIterator = characterOrder.iterator();
             }
 
@@ -140,6 +142,22 @@ public class Battle {
                 && currentParty.equals(game.getMonsterParty()));
     }
 
+    private void removeRedundantStatusEffects() {
+        ArrayList<GameCharacter> effectsToRemove = new ArrayList<>();
+
+        for (GameCharacter character : characterOrder) {
+            if (character.hasEffect()) {
+                if (!character.getEffect().isOnCooldown()) {
+                    effectsToRemove.add(character);
+                }
+            }
+        }
+
+        for (GameCharacter character : effectsToRemove) {
+            character.setEffect(null);
+        }
+    }
+
 
     // Getters
     public ArrayList<GameCharacter> getCharacterOrder() {
@@ -154,6 +172,9 @@ public class Battle {
         return currentCharacter;
     }
 
+    public static CooldownManager getCooldownManager() {
+        return cooldownManager;
+    }
 
     // Setters
     public void setCurrentCharacter(GameCharacter currentCharacter) {

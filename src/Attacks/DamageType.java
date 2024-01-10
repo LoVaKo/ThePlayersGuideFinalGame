@@ -1,7 +1,7 @@
 package Attacks;
 
 public enum DamageType {
-    NORMAL,
-    RANGED,
+    PHYSICAL,
+    MAGICAL,
     ALL
 }

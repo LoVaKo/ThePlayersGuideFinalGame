@@ -1,17 +1,17 @@
 package Attacks.Special;
 
 import Attacks.DamageType;
-import Attacks.Special.SpecialAttack;
 import StatusEffects.Blinded;
 
 public class QuickShot extends SpecialAttack {
 
     public QuickShot() {
         super("Quick Shot",
-                DamageType.RANGED,
-                0.5,
+                DamageType.PHYSICAL,
+                0.9,
                 3,
-                new Blinded());
+                new Blinded(),
+                0);
     }
 
     @Override

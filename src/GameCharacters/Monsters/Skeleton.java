@@ -1,6 +1,7 @@
 package GameCharacters.Monsters;
 
 import Attacks.Basic.BoneCrunch;
+import Inventories.Equippables.Weapons.WeaponType;
 
 public class Skeleton extends Monster {
 
@@ -9,8 +10,10 @@ public class Skeleton extends Monster {
         super("Skeleton",
                 new BoneCrunch(),
                 null,
+                null,
                 5,
-                1);
+                1,
+                WeaponType.MELEE);
     }
 
 }

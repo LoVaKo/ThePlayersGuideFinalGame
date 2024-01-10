@@ -9,8 +9,10 @@ public class Walt extends Hero {
     public Walt() {
         super("Walt",
                 new ViciousClaw(),
+                null,
                 new FurCoat(),
-                88);
+                88,
+                null);
     }
 
 

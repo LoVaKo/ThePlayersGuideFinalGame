@@ -1,14 +1,13 @@
 package Attacks.Basic;
 
-import Attacks.Basic.BasicAttack;
 import Attacks.DamageType;
 
 public class Stab extends BasicAttack {
     public Stab() {
         super("Stab",
-                DamageType.NORMAL,
+                DamageType.PHYSICAL,
                 1.0,
-                1);
+                3);
     }
 
     @Override

@@ -18,7 +18,7 @@ public class CoolDown extends StatusEffect {
             System.out.println(target + " has been " + newEffect.getName() + "!");
             target.setEffect(newEffect);
         } else {
-            System.out.println(target.getName() + " cannot be " + originalEffect.getName() + " for " + getNumOfRounds() + " rounds.");
+            System.out.println(target.getName() + " cannot be " + originalEffect.getName() + " for " + getNUM_ROUNDS_ACTIVE() + " rounds.");
         }
     }
 }

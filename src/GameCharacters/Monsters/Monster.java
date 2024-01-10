@@ -4,8 +4,9 @@ import Attacks.Basic.BasicAttack;
 import Attacks.Special.SpecialAttack;
 import Defenses.Defense;
 import GameCharacters.GameCharacter;
-import Inventory.Dagger;
-import Inventory.HealthPotion;
+import Inventories.Equippables.Weapons.Dagger;
+import Inventories.Equippables.Weapons.WeaponType;
+import Inventories.HealthPotion;
 import Main.Game;
 import Main.Party;
 
@@ -13,16 +14,16 @@ public abstract class Monster extends GameCharacter {
     private static final Party monsterParty = new Party();
     final int level;
 
-    public Monster(String name, BasicAttack basicAttack, SpecialAttack specialAttack, Defense defense, int hP, int level) {
-        super(  name,
+    public Monster(String name, BasicAttack basicAttack, SpecialAttack specialAttack, Defense defense, int hP, int level, WeaponType preferredWeaponType) {
+        super(name,
                 basicAttack,
                 specialAttack,
                 defense,
                 monsterParty,
                 GameCharacters.Heroes.Hero.getHeroParty(),
-                hP);
+                hP,
+                preferredWeaponType);
         this.level = level;
-
         monsterParty.addCharacter(this);
     }
 

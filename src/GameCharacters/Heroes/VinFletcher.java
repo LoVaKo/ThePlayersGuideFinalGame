@@ -1,7 +1,8 @@
 package GameCharacters.Heroes;
 
 import Attacks.Basic.Punch;
-import Inventory.VinsBow;
+import Inventories.Equippables.Weapons.Bow;
+import Inventories.Equippables.Weapons.WeaponType;
 
 public class VinFletcher extends Hero {
 
@@ -10,9 +11,11 @@ public class VinFletcher extends Hero {
                 "Vin Fletcher",
                 new Punch(),
                 null,
-                15);
+                null,
+                15,
+                WeaponType.RANGED);
 
-        equippedItems.addItem(new VinsBow());
+        getEquippedItems().setWeapon(new Bow());
     }
 
     public static String printCharacterInformation() {

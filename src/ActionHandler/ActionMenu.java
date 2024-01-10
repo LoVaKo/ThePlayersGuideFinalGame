@@ -1,7 +1,7 @@
 package ActionHandler;
 
 import GameCharacters.GameCharacter;
-import Inventory.Gear;
+import Inventories.Equippables.Weapons.Weapon;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -21,12 +21,23 @@ public class ActionMenu {
             actionArrayList.add(currentCharacter::standardAttack);
             stringList.add("Standard attack: " + currentCharacter.getStandardAttack().getName());
         }
-        // If character has gear equipped and is NOT Blinded, add Gear based Attack option
-        if (currentCharacter.isEquipped() &&
+
+        // If character has special attack, which is not on cooldown, and character is not blinded
+        // Add special attack
+        if (    !currentCharacter.isBlinded() &&
+                currentCharacter.getSpecialAttack() != null &&
+                !currentCharacter.getSpecialAttack().isOnCooldown()) {
+            actionArrayList.add(currentCharacter::specialAttack);
+            stringList.add("Special attack: " + currentCharacter.getSpecialAttack().getName());
+
+        }
+
+        // If character has a weapon equipped and is NOT Blinded, add Gear based Attack option
+        if (    currentCharacter.getEquippedItems().hasWeapon() &&
                 !currentCharacter.isBlinded()) {
-            Gear currentGear = (Gear) currentCharacter.getEquippedItems().getItems().get(0);
+            Weapon weapon = currentCharacter.getEquippedItems().getWeapon();
             actionArrayList.add(currentCharacter::gearBasedAttack);
-            stringList.add(currentGear.toString() + " attack: " + currentGear.getAttack().toString());
+            stringList.add(weapon.toString() + " attack: " + weapon.getAttack().toString());
         }
 
         // If party inventory has unused gear in it, add equip gear option

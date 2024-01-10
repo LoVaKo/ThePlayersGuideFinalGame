@@ -1,4 +1,6 @@
-package Inventory;
+package Inventories;
+
+import Inventories.Equippables.Gear;
 
 import java.util.ArrayList;
 

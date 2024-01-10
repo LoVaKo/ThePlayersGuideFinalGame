@@ -1,8 +1,8 @@
 package Main;
 
 import GameCharacters.GameCharacter;
-import Inventory.Inventory;
-import Inventory.InventoryItem;
+import Inventories.Inventory;
+import Inventories.InventoryItem;
 
 import java.util.ArrayList;
 import java.util.List;

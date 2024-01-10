@@ -4,8 +4,6 @@ import ActionHandler.ActionMenu;
 import Attacks.Special.SpecialAttack;
 import GameCharacters.GameCharacter;
 import Main.Party;
-import StatusEffects.CoolDown;
-import StatusEffects.StatusEffect;
 
 import java.util.Random;
 import java.util.Scanner;
@@ -63,9 +61,9 @@ public abstract class Attack {
                 }
             }
 
-            // Check if the attack comes with a status effect and weather the character already has an effect
-            if (hasEffect) {
-                SpecialAttack.resolveEffect(target, (SpecialAttack) this);
+            // Resolve Special Attack
+            if (this instanceof SpecialAttack) {
+                ((SpecialAttack) this).resolveEffect(target);
             }
 
             // Resolving damage done
@@ -77,7 +75,7 @@ public abstract class Attack {
                     System.out.println(target + " is now at " + target.getCurrentHP() + "/" + target.getStartingHP() + " HP.");
                 } else {
                     System.out.println(target + " has been defeated!");
-                    if (target.isEquipped()) target.lootCharacter(character);
+                    if (target.getEquippedItems().hasGear()) target.lootCharacter(character);
                     enemyParty.removeCharacter(target);
                     target.setDead(true);
                 }

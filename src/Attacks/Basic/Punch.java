@@ -1,13 +1,12 @@
 package Attacks.Basic;
 
-import Attacks.Basic.BasicAttack;
 import Attacks.DamageType;
 
 public class Punch extends BasicAttack {
 
     public Punch() {
         super("Punch",
-                DamageType.NORMAL,
+                DamageType.PHYSICAL,
                 1.0,
                 1);
     }

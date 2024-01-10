@@ -5,10 +5,12 @@ import Attacks.Attack;
 import Attacks.Basic.BasicAttack;
 import Attacks.Special.SpecialAttack;
 import Defenses.Defense;
-import Inventory.Gear;
-import Inventory.HealthPotion;
-import Inventory.Inventory;
-import Inventory.InventoryItem;
+import Inventories.Equippables.Gear;
+import Inventories.Equippables.GearHandler;
+import Inventories.Equippables.Weapons.WeaponType;
+import Inventories.HealthPotion;
+import Inventories.Inventory;
+import Inventories.InventoryItem;
 import Main.Party;
 import StatusEffects.Blinded;
 import StatusEffects.CoolDown;
@@ -21,18 +23,20 @@ public abstract class GameCharacter {
     protected final String name;
     protected final BasicAttack basicAttack;
     protected final SpecialAttack specialAttack;
+
+    protected final WeaponType preferredWeaponType;
     protected final Defense defense;
     protected final Party ownParty;
     protected final int startingHP;
+    private final GearHandler equippedItems = new GearHandler();
     protected Party enemyParty;
     protected int currentHP;
     protected StatusEffect effect;
-    protected Inventory equippedItems = new Inventory();
     private boolean isDead;
 
 
     // Constructor
-    public GameCharacter(String name, BasicAttack basicAttack, SpecialAttack specialAttack, Defense defense, Party ownParty, Party enemyParty, int hP) {
+    public GameCharacter(String name, BasicAttack basicAttack, SpecialAttack specialAttack, Defense defense, Party ownParty, Party enemyParty, int hP, WeaponType preferredWeaponType) {
         this.name = name;
         this.basicAttack = basicAttack;
         this.specialAttack = specialAttack;
@@ -43,6 +47,7 @@ public abstract class GameCharacter {
         this.currentHP = startingHP;
         this.isDead = false;
         this.effect = null;
+        this.preferredWeaponType = preferredWeaponType;
     }
 
     // ACTIONS
@@ -50,8 +55,12 @@ public abstract class GameCharacter {
         basicAttack.useAttack(this, this.enemyParty, false);
     }
 
+    public void specialAttack() {
+        specialAttack.useAttack(this, this.enemyParty, false);
+    }
+
     public void gearBasedAttack() {
-        this.getEquippedGear().getAttack().useAttack(this, this.enemyParty, false);
+        this.equippedItems.getWeapon().getAttack().useAttack(this, this.enemyParty, false);
     }
 
     public void standardAttackComputer() {
@@ -59,7 +68,7 @@ public abstract class GameCharacter {
     }
 
     public void gearBasedAttackComputer() {
-        this.getEquippedGear().getAttack().useAttack(this, this.enemyParty, true);
+        this.equippedItems.getWeapon().getAttack().useAttack(this, this.enemyParty, true);
     }
 
     public void doNothing() {
@@ -89,12 +98,12 @@ public abstract class GameCharacter {
             menu.print();
             menu.pickAction();
         } else {
-            inventory.getItems().get(userInput - 1).useItem(this, inventory); // userInput - 1 corresponds to the index in inventory
+            inventory.getItems().get(userInput - 1).use(this, inventory); // userInput - 1 corresponds to the index in inventory
         }
     }
 
     public void useHealthPotion() {
-        new HealthPotion().useItem(this, this.getOwnParty().getInventory());
+        new HealthPotion().use(this, this.getOwnParty().getInventory());
     }
 
     public void equipGearPlayer() {
@@ -124,7 +133,7 @@ public abstract class GameCharacter {
         Gear pickedGear = availableGear.get(indexOfItem);
 
         // Equip item
-        pickedGear.equipItem(this, this.getOwnParty().getInventory());
+        pickedGear.equip(this);
     }
 
     public void equipGearComputer() {
@@ -139,13 +148,41 @@ public abstract class GameCharacter {
             }
         }
         assert pickedGear != null;
-        pickedGear.equipItem(this, this.ownParty.getInventory());
+        pickedGear.equip(this);
     }
 
-    public void lootCharacter(GameCharacter character) {
-        Gear equippedGear = this.getEquippedGear();
-        System.out.println(character.getName() + " has looted " + this.name + " and recieved: " + equippedGear.toString());
-        character.getOwnParty().getInventory().getItems().add(equippedGear);
+    public void addToPartyInventory(InventoryItem item) {
+        getOwnParty().getInventory().getItems().add(item);
+    }
+    public void removeFromPartyInventory(InventoryItem item) {
+        getOwnParty().getInventory().getItems().remove(item);
+    }
+
+    public void lootCharacter(GameCharacter looter) {
+        // Check if this character has any gear
+        if (equippedItems.hasGear()) {
+            StringBuilder lootMessage = new StringBuilder();
+            lootMessage.append(looter.getName()).append(" has looted ").append(this.name).append(" and recieved: ");
+
+            // now check for different types of gear
+            if (equippedItems.hasWeapon()) {
+                lootMessage.append("\n- ").append(equippedItems.getWeapon().toString());
+                looter.addToPartyInventory(equippedItems.getWeapon());
+            }
+            if (equippedItems.hasArmor()) {
+                lootMessage.append("\n- ").append(equippedItems.getArmor().toString());
+                looter.addToPartyInventory(equippedItems.getArmor());
+            }
+            if (equippedItems.hasJewelry()) {
+                lootMessage.append("\n- ").append(equippedItems.getJewelry().toString());
+                looter.addToPartyInventory(equippedItems.getJewelry());
+            }
+
+            // Print out loot message
+            System.out.println(lootMessage);
+        }
+
+
     }
 
     // Status Effects
@@ -187,11 +224,16 @@ public abstract class GameCharacter {
         return basicAttack;
     }
 
+    public SpecialAttack getSpecialAttack() {
+        return specialAttack;
+    }
+
     public String getCharacterReport() {
         StringBuilder report = new StringBuilder();
 
         report.append(getName()); // Name
-        if (isEquipped()) report.append(" with ").append(equippedItems.getItems().get(0).toString()); // Equipped with
+        if (equippedItems.hasWeapon())
+            report.append(" with ").append(equippedItems.getWeapon().toString()); // Equipped with
         report.append(" (").append(getCurrentHP()).append("/").append(getStartingHP()).append(")"); // HP
         if (hasEffect() && !(getEffect() instanceof CoolDown))
             report.append(" >").append(getEffect().getName()).append("<");
@@ -203,12 +245,8 @@ public abstract class GameCharacter {
         return ownParty;
     }
 
-    public Inventory getEquippedItems() {
+    public GearHandler getEquippedItems() {
         return equippedItems;
-    }
-
-    public Gear getEquippedGear() {
-        return (Gear) equippedItems.getItems().get(0);
     }
 
     public boolean hasDefense() {
@@ -228,20 +266,15 @@ public abstract class GameCharacter {
         return this.name;
     }
 
-    public boolean isEquipped() {
-        return !equippedItems.getItems().isEmpty();
-    }
-
     public boolean hasEffect() {
         return this.effect != null;
     }
 
     public void checkForStatusEffect() {
-        if (this.hasEffect() &&
-                !(this.effect instanceof CoolDown)) {
+        if (this.hasEffect()) {
             System.out.println(this.name + " is " + this.effect.getName() + "!");
             System.out.println(this.effect.getDescription());
-            System.out.println("Remaining number of rounds: " + this.effect.getNumOfRounds());
+            System.out.println("Remaining number of rounds: " + this.effect.getCounter());
             System.out.println();
         }
     }

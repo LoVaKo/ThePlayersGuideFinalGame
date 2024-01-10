@@ -7,7 +7,7 @@ import java.util.Random;
 public class ViciousClaw extends BasicAttack {
     public ViciousClaw() {
         super("Vicious Claw",
-                DamageType.NORMAL,
+                DamageType.PHYSICAL,
                 1.0,
                 5);
     }
