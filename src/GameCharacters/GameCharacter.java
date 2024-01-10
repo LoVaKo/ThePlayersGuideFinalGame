@@ -154,6 +154,7 @@ public abstract class GameCharacter {
     public void addToPartyInventory(InventoryItem item) {
         getOwnParty().getInventory().getItems().add(item);
     }
+
     public void removeFromPartyInventory(InventoryItem item) {
         getOwnParty().getInventory().getItems().remove(item);
     }

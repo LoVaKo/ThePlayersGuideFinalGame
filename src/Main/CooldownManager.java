@@ -4,7 +4,6 @@ import Attacks.Special.SpecialAttack;
 import StatusEffects.StatusEffect;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 public class CooldownManager {
     private final ArrayList<Object> objectsOnCooldown = new ArrayList<>();

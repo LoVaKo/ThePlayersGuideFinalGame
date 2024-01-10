@@ -1,13 +1,11 @@
 package StatusEffects;
 
-import GameCharacters.GameCharacter;
-
 public abstract class StatusEffect {
     private final String name;
     private final String description;
     private final int NUM_ROUNDS_COOLDOWN;
     private boolean isOnCooldown;
-    private int NUM_ROUNDS_ACTIVE;
+    private final int NUM_ROUNDS_ACTIVE;
     private int counter;
 
     public StatusEffect(String name, String description, int numOfRounds, int coolDown) {
@@ -49,6 +47,7 @@ public abstract class StatusEffect {
     public void setCounter(int counter) {
         this.counter = counter;
     }
+
     public void countDownByOne() {
         this.counter--;
     }

@@ -24,7 +24,7 @@ public class ActionMenu {
 
         // If character has special attack, which is not on cooldown, and character is not blinded
         // Add special attack
-        if (    !currentCharacter.isBlinded() &&
+        if (!currentCharacter.isBlinded() &&
                 currentCharacter.getSpecialAttack() != null &&
                 !currentCharacter.getSpecialAttack().isOnCooldown()) {
             actionArrayList.add(currentCharacter::specialAttack);
@@ -33,7 +33,7 @@ public class ActionMenu {
         }
 
         // If character has a weapon equipped and is NOT Blinded, add Gear based Attack option
-        if (    currentCharacter.getEquippedItems().hasWeapon() &&
+        if (currentCharacter.getEquippedItems().hasWeapon() &&
                 !currentCharacter.isBlinded()) {
             Weapon weapon = currentCharacter.getEquippedItems().getWeapon();
             actionArrayList.add(currentCharacter::gearBasedAttack);

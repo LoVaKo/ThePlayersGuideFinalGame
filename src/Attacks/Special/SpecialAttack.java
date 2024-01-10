@@ -7,14 +7,12 @@ import Main.CooldownManager;
 import StatusEffects.CoolDown;
 import StatusEffects.StatusEffect;
 
-import java.util.ArrayList;
-
 public abstract class SpecialAttack extends Attack {
     private final StatusEffect effect;
     private final int NUM_ROUNDS_COOLDOWN;
     private boolean isOnCooldown;
     private int counter;
-    private CooldownManager cooldownManager = Main.Battle.getCooldownManager();
+    private final CooldownManager cooldownManager = Main.Battle.getCooldownManager();
 
     public SpecialAttack(String name, DamageType damageType, double successRate, int MAX_DAMAGE, StatusEffect effect, int coolDown) {
         super(name,
@@ -48,6 +46,10 @@ public abstract class SpecialAttack extends Attack {
         return counter;
     }
 
+    public void setCounter(int counter) {
+        this.counter = counter;
+    }
+
     public boolean isOnCooldown() {
         return isOnCooldown;
     }
@@ -56,10 +58,7 @@ public abstract class SpecialAttack extends Attack {
         isOnCooldown = onCooldown;
     }
 
-    public void setCounter(int counter) {
-        this.counter = counter;
-    }
     public void countDownByOne() {
-        this.counter --;
+        this.counter--;
     }
 }

@@ -63,21 +63,21 @@ public class ActionPicker {
 
         for (InventoryItem item : inventory.getItems()) {
             if (item instanceof Weapon) {
-                if (    !currentCharacter.getEquippedItems().hasWeapon() ||
+                if (!currentCharacter.getEquippedItems().hasWeapon() ||
                         currentCharacter.getEquippedItems().getWeapon().getLevel() < ((Weapon) item).getLevel()) {
                     return true;
                 }
             }
 
             if (item instanceof Armor) {
-                if (    !currentCharacter.getEquippedItems().hasArmor() ||
+                if (!currentCharacter.getEquippedItems().hasArmor() ||
                         currentCharacter.getEquippedItems().getArmor().getLevel() < ((Armor) item).getLevel()) {
                     return true;
                 }
             }
 
             if (item instanceof Jewelry) {
-                if (    !currentCharacter.getEquippedItems().hasJewelry() ||
+                if (!currentCharacter.getEquippedItems().hasJewelry() ||
                         currentCharacter.getEquippedItems().getJewelry().getLevel() < ((Jewelry) item).getLevel()) {
                     return true;
                 }

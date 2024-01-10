@@ -10,13 +10,13 @@ import java.util.Iterator;
 import java.util.Scanner;
 
 public class Battle {
+    private final static CooldownManager cooldownManager = new CooldownManager();
     private final ArrayList<GameCharacter> characterOrder;
     private final Game game;
     private GameCharacter currentCharacter;
     private Party currentParty;
     private Party currentEnemy;
     private boolean allEnemiesDefeated;
-    private final static CooldownManager cooldownManager = new CooldownManager();
 
     // Constructor
     public Battle(Game game) {
@@ -26,6 +26,10 @@ public class Battle {
         this.characterOrder = determineCharacterOrder();
         this.currentCharacter = characterOrder.get(0);
         this.allEnemiesDefeated = false;
+    }
+
+    public static CooldownManager getCooldownManager() {
+        return cooldownManager;
     }
 
     // Main.Battle Mechanics
@@ -101,7 +105,6 @@ public class Battle {
         }
     }
 
-
     public ArrayList<GameCharacter> determineCharacterOrder() {
         ArrayList<GameCharacter> allCharacters = new ArrayList<>();
         allCharacters.addAll(game.getHeroParty().getCharacters());
@@ -158,7 +161,6 @@ public class Battle {
         }
     }
 
-
     // Getters
     public ArrayList<GameCharacter> getCharacterOrder() {
         return characterOrder;
@@ -170,10 +172,6 @@ public class Battle {
 
     public GameCharacter getCurrentCharacter() {
         return currentCharacter;
-    }
-
-    public static CooldownManager getCooldownManager() {
-        return cooldownManager;
     }
 
     // Setters
