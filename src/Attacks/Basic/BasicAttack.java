@@ -9,7 +9,7 @@ public abstract class BasicAttack extends Attack {
         super(name,
                 damageType,
                 successRate,
-                MAX_DAMAGE,
-                false);
+                MAX_DAMAGE
+        );
     }
 }

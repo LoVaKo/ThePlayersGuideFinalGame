@@ -14,6 +14,7 @@ import Inventories.InventoryItem;
 import Main.Party;
 import StatusEffects.Blinded;
 import StatusEffects.CoolDown;
+import StatusEffects.Frightened;
 import StatusEffects.StatusEffect;
 
 import java.util.ArrayList;
@@ -23,7 +24,6 @@ public abstract class GameCharacter {
     protected final String name;
     protected final BasicAttack basicAttack;
     protected final SpecialAttack specialAttack;
-
     protected final WeaponType preferredWeaponType;
     protected final Defense defense;
     protected final Party ownParty;
@@ -190,6 +190,9 @@ public abstract class GameCharacter {
     public boolean isBlinded() {
         return this.effect instanceof Blinded;
     }
+    public boolean isFrightened() {
+        return this.effect instanceof Frightened;
+    }
 
 
     // Getters and setters
@@ -209,7 +212,7 @@ public abstract class GameCharacter {
         isDead = dead;
     }
 
-    public boolean getIsDead() {
+    public boolean isDead() {
         return isDead;
     }
 
@@ -274,7 +277,7 @@ public abstract class GameCharacter {
     public void checkForStatusEffect() {
         if (this.hasEffect()) {
             System.out.println(this.name + " is " + this.effect.getName() + "!");
-            System.out.println(this.effect.getDescription());
+            this.effect.apply(this);
             System.out.println("Remaining number of rounds: " + this.effect.getCounter());
             System.out.println();
         }

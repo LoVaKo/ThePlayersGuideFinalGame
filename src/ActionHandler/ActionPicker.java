@@ -1,5 +1,6 @@
 package ActionHandler;
 
+import Attacks.Special.SpecialAttack;
 import GameCharacters.GameCharacter;
 import Inventories.Equippables.Armor.Armor;
 import Inventories.Equippables.Jewelry.Jewelry;
@@ -88,6 +89,13 @@ public class ActionPicker {
     }
 
     private boolean shouldUseGearAttack() {
+        if (currentCharacter.getEquippedItems().getWeapon() != null) {
+            if (currentCharacter.getEquippedItems().getWeapon().getAttack() instanceof SpecialAttack selectedAttack) {
+                if (selectedAttack.isOnCooldown()) return false;
+            }
+        }
+
+
         return currentCharacter.getEquippedItems().hasWeapon()
                 && currentCharacter.getStandardAttack().MAX_DAMAGE <= currentCharacter.getEquippedItems().getWeapon().getAttack().MAX_DAMAGE
                 && !currentCharacter.isBlinded();

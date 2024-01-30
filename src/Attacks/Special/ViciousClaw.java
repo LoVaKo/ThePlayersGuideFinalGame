@@ -1,15 +1,18 @@
-package Attacks.Basic;
+package Attacks.Special;
 
 import Attacks.DamageType;
+import StatusEffects.Wounded;
 
 import java.util.Random;
 
-public class ViciousClaw extends BasicAttack {
+public class ViciousClaw extends SpecialAttack {
     public ViciousClaw() {
         super("Vicious Claw",
                 DamageType.PHYSICAL,
                 1.0,
-                5);
+                5,
+                new Wounded(),
+                3);
     }
 
     @Override
@@ -19,6 +22,6 @@ public class ViciousClaw extends BasicAttack {
         if (percentage <= 33) {
             return 5;
         }
-        return 1;
+        return 3;
     }
 }

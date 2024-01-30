@@ -11,16 +11,14 @@ import java.util.Scanner;
 public abstract class Attack {
     public final int MAX_DAMAGE;
     private final double SUCCESS_RATE;
-    private final boolean hasEffect;
     protected String name;
     protected DamageType damageType;
 
-    public Attack(String name, DamageType damageType, double successRate, int MAX_DAMAGE, boolean hasEffect) {
+    public Attack(String name, DamageType damageType, double successRate, int MAX_DAMAGE) {
         this.name = name;
         this.damageType = damageType;
         this.SUCCESS_RATE = successRate;
         this.MAX_DAMAGE = MAX_DAMAGE;
-        this.hasEffect = hasEffect;
     }
 
     public void useAttack(GameCharacter character, Party enemyParty, boolean isComputer) {

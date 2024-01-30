@@ -10,16 +10,16 @@ import StatusEffects.StatusEffect;
 public abstract class SpecialAttack extends Attack {
     private final StatusEffect effect;
     private final int NUM_ROUNDS_COOLDOWN;
+    private final CooldownManager cooldownManager = Main.Battle.getCooldownManager();
     private boolean isOnCooldown;
     private int counter;
-    private final CooldownManager cooldownManager = Main.Battle.getCooldownManager();
 
     public SpecialAttack(String name, DamageType damageType, double successRate, int MAX_DAMAGE, StatusEffect effect, int coolDown) {
         super(name,
                 damageType,
                 successRate,
-                MAX_DAMAGE,
-                true);
+                MAX_DAMAGE
+        );
         this.effect = effect;
         this.NUM_ROUNDS_COOLDOWN = coolDown;
         this.isOnCooldown = false;

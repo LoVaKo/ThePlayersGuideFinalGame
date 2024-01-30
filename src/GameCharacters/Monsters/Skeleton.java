@@ -11,8 +11,8 @@ public class Skeleton extends Monster {
                 new BoneCrunch(),
                 null,
                 null,
-                5,
-                1,
+                10,
+                2,
                 WeaponType.MELEE);
     }
 
