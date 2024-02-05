@@ -34,10 +34,6 @@ public abstract class StatusEffect {
         return name;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
     public int getNUM_ROUNDS_ACTIVE() {
         return NUM_ROUNDS_ACTIVE;
     }

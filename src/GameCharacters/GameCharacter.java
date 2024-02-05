@@ -190,6 +190,7 @@ public abstract class GameCharacter {
     public boolean isBlinded() {
         return this.effect instanceof Blinded;
     }
+
     public boolean isFrightened() {
         return this.effect instanceof Frightened;
     }
@@ -208,12 +209,12 @@ public abstract class GameCharacter {
         return defense;
     }
 
-    public void setDead(boolean dead) {
-        isDead = dead;
-    }
-
     public boolean isDead() {
         return isDead;
+    }
+
+    public void setDead(boolean dead) {
+        isDead = dead;
     }
 
     public int getStartingHP() {

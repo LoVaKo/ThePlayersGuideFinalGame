@@ -3,6 +3,7 @@ package Attacks;
 import ActionHandler.ActionMenu;
 import Attacks.Special.SpecialAttack;
 import GameCharacters.GameCharacter;
+import Main.CooldownManager;
 import Main.Party;
 
 import java.util.Random;
@@ -81,6 +82,11 @@ public abstract class Attack {
 
         } else {
             System.out.println(character.getName() + " missed!");
+        }
+
+        // Whether attack is succesful or not, add to cooldownmanager when neccesary
+        if (this instanceof SpecialAttack) {
+            ((SpecialAttack) this).addToCooldownManager();
         }
 
     }

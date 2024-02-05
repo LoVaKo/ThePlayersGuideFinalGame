@@ -4,20 +4,23 @@ import ActionHandler.ActionMenu;
 import ActionHandler.ActionPicker;
 import GameCharacters.GameCharacter;
 import GameCharacters.Heroes.Walt;
-import StatusEffects.Frightened;
 
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 
 public class Battle {
     private final static CooldownManager cooldownManager = new CooldownManager();
     private final static CharacterOrderManager characterOrderManager = new CharacterOrderManager();
+    private final static Scanner scanner = new Scanner(System.in);
     private final Game game;
     private GameCharacter currentCharacter;
     private Party currentParty;
     private Party currentEnemy;
     private boolean allEnemiesDefeated;
+    private boolean skipAction;
 
     // Constructor
     public Battle(Game game) {
@@ -29,39 +32,27 @@ public class Battle {
         this.allEnemiesDefeated = false;
     }
 
-
+    // Getters
+    public static CooldownManager getCooldownManager() {
+        return cooldownManager;
+    }
 
     // Main.Battle Mechanics
     public void execute() {
-        Scanner scanner = new Scanner(System.in);
         ArrayList<GameCharacter> order = characterOrderManager.getOrder();
 
         while (!allEnemiesDefeated && !game.gameOver) {
 
             for (GameCharacter character : order) {
-                // Setting up current character
+                skipAction = false;
+
                 setCurrentCharacter(character);
-
-                boolean skipAction = false;
-
                 battleReport();
-
-                System.out.println();
-                System.out.println("\u001B[34mIts " + currentCharacter.getName() + "'s turn...\u001B[0m");
-                System.out.println();
-
-                // Check for status effects
                 currentCharacter.checkForStatusEffect();
-
-                // Check for little Easter egg:
-                if (currentCharacter instanceof Walt) {
-                    if (((Walt) currentCharacter).takeNap()) {
-                        skipAction = true;
-                    }
-                }
+                checkForEasterEgg();
 
                 // Player picks action or computer picks action.
-                if (    !currentCharacter.isDead() &&
+                if (!currentCharacter.isDead() &&
                         !currentCharacter.isFrightened() &&
                         !skipAction) {
                     if (isComputerPlayer()) {
@@ -74,28 +65,9 @@ public class Battle {
                     }
                 }
 
-                // Checking to see if any characters need to be removed from characterOrder
-                for (GameCharacter character2 : characterOrderManager.getOrder()) {
-                    if (character2.isDead()) {
-                        CharacterOrderManager.remove(character2);
-                    }
-                }
-
-                // Checking to see if all enemies are defeated and battle should end
-                if (currentEnemy.isEmpty()) {
-                    System.out.println("\nAll enemies in this round have been defeated!");
-                    System.out.println();
-
-                    allEnemiesDefeated = true;
-
-                    currentEnemy.loot(currentParty.getInventory());
-
-                    int ADD_BATTLE = 1;
-                    game.setNumOfBattles(ADD_BATTLE);
-
-                    System.out.println("\n\u001B[1mPress ENTER to continue\u001B[0m");
-                    scanner.nextLine();
-                }
+                // Resolving round
+                removeDeadCharacters();
+                checkForEndOfBattle();
 
                 // End battle if all enemies are defeated
                 if (allEnemiesDefeated) {
@@ -103,18 +75,15 @@ public class Battle {
                     break;
                 }
 
-                // Checking to see if all heroes are defeated and battle should end
-                if (game.getHeroParty().isEmpty()) {
-                    System.out.println();
-                    System.out.println("All heroes have been defeated! The dark forces have prevailed.");
-                    game.gameOver = true;
-                }
                 // End battle if all heroes are defeated
                 if (game.gameOver) {
                     characterOrderManager.clear();
                     cooldownManager.clear();
                     break;
                 }
+
+                System.out.println("\n\u001B[1mPress ENTER to continue\u001B[0m");
+                scanner.nextLine();
             }
 
 
@@ -126,8 +95,44 @@ public class Battle {
             // Back to the first character by copying updated characterorder
             order = new ArrayList<>(characterOrderManager.getOrder());
 
+
+        }
+    }
+
+    private void checkForEndOfBattle() {
+        if (currentEnemy.isEmpty()) {
+            System.out.println("\nAll enemies in this round have been defeated!");
+            System.out.println();
+
+            allEnemiesDefeated = true;
+
+            currentEnemy.loot(currentParty.getInventory());
+
+            int ADD_BATTLE = 1;
+            game.setNumOfBattles(ADD_BATTLE);
+
             System.out.println("\n\u001B[1mPress ENTER to continue\u001B[0m");
             scanner.nextLine();
+        } else if (game.getHeroParty().isEmpty()) {
+            System.out.println();
+            System.out.println("All heroes have been defeated! The dark forces have prevailed.");
+            game.gameOver = true;
+        }
+    }
+
+    private void removeDeadCharacters() {
+        for (GameCharacter character2 : characterOrderManager.getOrder()) {
+            if (character2.isDead()) {
+                CharacterOrderManager.remove(character2);
+            }
+        }
+    }
+
+    private void checkForEasterEgg() {
+        if (currentCharacter instanceof Walt) {
+            if (((Walt) currentCharacter).takeNap()) {
+                skipAction = true;
+            }
         }
     }
 
@@ -155,6 +160,9 @@ public class Battle {
             }
         }
         System.out.println("======================================================");
+        System.out.println();
+        System.out.println("\u001B[34mIts " + currentCharacter.getName() + "'s turn...\u001B[0m");
+        System.out.println();
     }
 
     private boolean isComputerPlayer() {
@@ -177,11 +185,6 @@ public class Battle {
         for (GameCharacter character : effectsToRemove) {
             character.setEffect(null);
         }
-    }
-
-    // Getters
-    public static CooldownManager getCooldownManager() {
-        return cooldownManager;
     }
 
     // Setters

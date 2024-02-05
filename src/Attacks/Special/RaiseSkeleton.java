@@ -22,5 +22,6 @@ public class RaiseSkeleton extends SpecialAttack {
         System.out.println("A Skeleton climbs out from the ground!");
         Skeleton skeleton = new Skeleton();
         CharacterOrderManager.add(skeleton);
+        addToCooldownManager();
     }
 }

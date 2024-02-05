@@ -30,7 +30,6 @@ public abstract class SpecialAttack extends Attack {
         if (!target.hasEffect()) {
             System.out.println(target + " has been " + effect + "!");
             target.setEffect(effect);
-            cooldownManager.add(this);
             cooldownManager.add(effect);
 
         } else if (target.getEffect() instanceof CoolDown) {
@@ -60,5 +59,9 @@ public abstract class SpecialAttack extends Attack {
 
     public void countDownByOne() {
         this.counter--;
+    }
+
+    public void addToCooldownManager() {
+        cooldownManager.add(this);
     }
 }

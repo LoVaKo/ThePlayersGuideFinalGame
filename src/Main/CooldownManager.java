@@ -66,4 +66,5 @@ public class CooldownManager {
         objectsOnCooldown.clear();
         objectsToBeRemoved.clear();
     }
+
 }

@@ -4,20 +4,47 @@ import GameCharacters.GameCharacter;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class CharacterOrderManager {
     private static final ArrayList<GameCharacter> characterOrder = new ArrayList<>();
+    private static final ReadWriteLock lock = new ReentrantReadWriteLock();
 
     public static void remove(GameCharacter character) {
-        characterOrder.remove(character);
+        lock.writeLock();
+        try {
+            characterOrder.remove(character);
+        } finally {
+            lock.writeLock().unlock();
+        }
+    }
+
+    public static void add(GameCharacter character) {
+        lock.writeLock().lock();
+        try {
+            characterOrder.add(character);
+        } finally {
+            lock.writeLock().unlock();
+        }
+    }
+
+    public static GameCharacter getCharacterAt(int index) {
+        return characterOrder.get(index);
     }
 
     public ArrayList<GameCharacter> getOrder() {
-        return characterOrder;
+        lock.readLock().lock();
+        try {
+            return new ArrayList<>(characterOrder);
+        } finally {
+            lock.readLock().unlock();
+        }
     }
+
     public void determineOrder() {
         // Clearing current character order
-        characterOrder.clear();
+        clear();
 
         // Creating a list with all characters and shuffling it
         ArrayList<GameCharacter> allCharacters = new ArrayList<>();
@@ -26,18 +53,20 @@ public class CharacterOrderManager {
         Collections.shuffle(allCharacters);
 
         // Copying to characterOrder
-        characterOrder.addAll(allCharacters);
-    }
-
-    public static void add(GameCharacter character) {
-        characterOrder.add(character);
-    }
-
-    public static GameCharacter getCharacterAt(int index) {
-        return characterOrder.get(index);
+        lock.writeLock().lock();
+        try {
+            characterOrder.addAll(allCharacters);
+        } finally {
+            lock.writeLock().unlock();
+        }
     }
 
     public void clear() {
-        characterOrder.clear();
+        lock.writeLock().lock();
+        try {
+            characterOrder.clear();
+        } finally {
+            lock.writeLock().unlock();
+        }
     }
 }
