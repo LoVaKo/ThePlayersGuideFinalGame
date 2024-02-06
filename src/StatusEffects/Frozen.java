@@ -5,7 +5,6 @@ import GameCharacters.GameCharacter;
 public class Frozen extends StatusEffect {
     public Frozen() {
         super("Frozen",
-                "unable to perform actions",
                 2,
                 3);
     }

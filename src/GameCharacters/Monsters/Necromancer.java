@@ -3,7 +3,6 @@ package GameCharacters.Monsters;
 import Attacks.Basic.RaiseShade;
 import Attacks.Special.NecroticBlast;
 import Inventories.Equippables.Jewelry.BonyAmulet;
-import Inventories.Equippables.Weapons.StaffOfResurrection;
 import Inventories.Equippables.Weapons.WeaponType;
 
 public class Necromancer extends Monster {
@@ -17,6 +16,6 @@ public class Necromancer extends Monster {
                 WeaponType.MAGICAL);
 
         new BonyAmulet().equipUponCreation(this);
-        new StaffOfResurrection().equipUponCreation(this);
+        //new StaffOfResurrection().equipUponCreation(this);
     }
 }

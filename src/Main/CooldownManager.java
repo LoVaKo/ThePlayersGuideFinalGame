@@ -6,65 +6,91 @@ import StatusEffects.StatusEffect;
 import java.util.ArrayList;
 
 public class CooldownManager {
-    private final ArrayList<Object> objectsOnCooldown = new ArrayList<>();
-    private final ArrayList<Object> objectsToBeRemoved = new ArrayList<>();
+
+    private final ArrayList<SpecialAttack> specialAttackCooldown = new ArrayList<>();
+    private final ArrayList<StatusEffect> activeStatusEffects = new ArrayList<>();
+    private final ArrayList<StatusEffect> statusEffectCooldown = new ArrayList<>();
+    private final ArrayList<SpecialAttack> attacksToBeRemoved = new ArrayList<>();
+    private final ArrayList<StatusEffect> activeEffectsToBeRemoved = new ArrayList<>();
+    private final ArrayList<StatusEffect> cooldownEffectsToBeRemoved = new ArrayList<>();
 
 
     public void add(Object object) {
-        // Add to arraylist of objects on cooldown
-        // Set onCooldown to true
-        // Set counter to right number
 
         if (object instanceof SpecialAttack) {
-            objectsOnCooldown.add(object);
-            ((SpecialAttack) object).setOnCooldown(true);
-            ((SpecialAttack) object).setCounter(((SpecialAttack) object).getNUM_ROUNDS_COOLDOWN());
+            addSpecialAttack((SpecialAttack) object);
         } else if (object instanceof StatusEffect) {
-            objectsOnCooldown.add(object);
-            ((StatusEffect) object).setOnCooldown(true);
-            ((StatusEffect) object).setCounter(((StatusEffect) object).getNUM_ROUNDS_COOLDOWN());
+            addStatusEffect((StatusEffect) object);
         }
     }
 
     private void remove() {
-        for (Object object : objectsToBeRemoved) {
-            if (object instanceof SpecialAttack) {
-                objectsOnCooldown.remove(object);
-                ((SpecialAttack) object).setOnCooldown(false);
-            } else if (object instanceof StatusEffect) {
-                objectsOnCooldown.remove(object);
-                ((StatusEffect) object).setOnCooldown(false);
-            }
+        for (StatusEffect effect : cooldownEffectsToBeRemoved) {
+            statusEffectCooldown.remove(effect);
+            effect.setOnCooldown(false);
         }
-        objectsToBeRemoved.clear();
+
+        for (StatusEffect effect : activeEffectsToBeRemoved) {
+            activeStatusEffects.remove(effect);
+            effect.setActive(false);
+        }
+
+        for (SpecialAttack attack : attacksToBeRemoved) {
+            specialAttackCooldown.remove(attack);
+            attack.setOnCooldown(false);
+        }
+
+        cooldownEffectsToBeRemoved.clear();
+        activeEffectsToBeRemoved.clear();
+        attacksToBeRemoved.clear();
     }
 
     public void updateCooldowns() {
         // Reduce counter on all objects by 1
         // When the counter reaches zero, remove object from countdown.
-
-        for (Object object : objectsOnCooldown) {
-            if (object instanceof SpecialAttack) {
-                ((SpecialAttack) object).countDownByOne();
-                if (((SpecialAttack) object).getCounter() == 0) {
-                    objectsToBeRemoved.add(object);
-                }
+        for (StatusEffect effect : statusEffectCooldown) {
+            if (effect.getCooldownCounter() == 0) {
+                cooldownEffectsToBeRemoved.add(effect);
             }
-            if (object instanceof StatusEffect) {
-                ((StatusEffect) object).countDownByOne();
-                if (((StatusEffect) object).getCounter() == 0) {
-                    objectsToBeRemoved.add(object);
-                }
+        }
+
+        for (StatusEffect effect : activeStatusEffects) {
+            if (effect.getActiveCounter() == 0) {
+                activeEffectsToBeRemoved.add(effect);
+            }
+        }
+
+        for (SpecialAttack attack : specialAttackCooldown) {
+            if (attack.getCounter() == 0) {
+                attacksToBeRemoved.add(attack);
             }
         }
 
         remove();
     }
 
-
     public void clear() {
-        objectsOnCooldown.clear();
-        objectsToBeRemoved.clear();
+        cooldownEffectsToBeRemoved.clear();
+        activeEffectsToBeRemoved.clear();
+        attacksToBeRemoved.clear();
+        specialAttackCooldown.clear();
+        statusEffectCooldown.clear();
+        activeStatusEffects.clear();
+    }
+
+    public void addSpecialAttack(SpecialAttack attack) {
+        specialAttackCooldown.add(attack);
+        attack.setOnCooldown(true);
+        attack.setCounter(attack.getNUM_ROUNDS_COOLDOWN());
+    }
+
+    public void addStatusEffect(StatusEffect effect) {
+        statusEffectCooldown.add(effect);
+        activeStatusEffects.add(effect);
+        effect.setOnCooldown(true);
+        effect.setActive(true);
+        effect.setActiveCounter(effect.getNUM_ROUNDS_ACTIVE());
+        effect.setCooldownCounter(effect.getNUM_ROUNDS_COOLDOWN());
     }
 
 }

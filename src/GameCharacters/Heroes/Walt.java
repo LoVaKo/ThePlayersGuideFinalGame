@@ -38,9 +38,9 @@ public class Walt extends Hero {
 
     public boolean takeNap() {
         Random random = new Random();
-        int nappingChance = 5;
-        int rollForNap = random.nextInt();
-        if (rollForNap < nappingChance) {
+        double CHANCE_FOR_NAP = 0.05;
+        double ROLL_FOR_NAP = random.nextDouble();
+        if (ROLL_FOR_NAP < CHANCE_FOR_NAP) {
             System.out.println("Walt decided to take an unexpected nap.");
             return true;
         }

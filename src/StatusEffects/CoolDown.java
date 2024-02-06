@@ -7,8 +7,7 @@ public class CoolDown extends StatusEffect {
 
     public CoolDown(StatusEffect originalEffect) {
         super("Cool down",
-                "Temporarily invulnerable to status effects",
-                1,
+                originalEffect.getCooldownCounter(),
                 0);
         this.originalEffect = originalEffect;
     }

@@ -31,7 +31,7 @@ public abstract class Monster extends GameCharacter {
 
     public static void setupMonsterParty(int numOfHeroes, Game game) {
         new Necromancer();
-        new Skeleton();
+        //new Skeleton();
 
 //        int numOfSkeletons = 0;
 //        int numOfHealthPotions = 0;

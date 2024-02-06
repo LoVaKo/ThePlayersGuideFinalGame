@@ -7,7 +7,6 @@ public class Game {
     private final Party heroParty = GameCharacters.Heroes.Hero.getHeroParty();
     private final Party monsterParty = GameCharacters.Monsters.Monster.getMonsterParty();
     public boolean gameOver = false;
-
     private int numOfBattles = 0;
 
 

@@ -282,10 +282,12 @@ public abstract class GameCharacter {
 
     public void checkForStatusEffect() {
         if (this.hasEffect()) {
-            System.out.println(this.name + " is " + this.effect.getName() + "!");
-            this.effect.apply(this);
-            System.out.println("Remaining number of rounds: " + this.effect.getCounter());
-            System.out.println();
+            if (!(this.getEffect() instanceof CoolDown)) {
+                System.out.println(this.name + " is " + this.effect.getName() + "!");
+                this.effect.apply(this);
+                System.out.println("Remaining number of rounds: " + (this.effect.getActiveCounter() - 1));
+                System.out.println();
+            }
         }
     }
 

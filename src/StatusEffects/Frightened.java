@@ -5,7 +5,6 @@ import GameCharacters.GameCharacter;
 public class Frightened extends StatusEffect {
     public Frightened() {
         super("Frightened",
-                "Unable to perform any actions",
                 1,
                 3);
     }

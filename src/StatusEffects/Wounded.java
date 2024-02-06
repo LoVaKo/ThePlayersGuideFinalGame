@@ -6,7 +6,6 @@ public class Wounded extends StatusEffect {
 
     public Wounded() {
         super("Wounded",
-                "lose 1 hp every round for 3 rounds",
                 3,
                 3);
     }

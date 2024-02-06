@@ -4,19 +4,21 @@ import GameCharacters.GameCharacter;
 
 public abstract class StatusEffect {
     private final String name;
-    private final String description;
     private final int NUM_ROUNDS_COOLDOWN;
     private final int NUM_ROUNDS_ACTIVE;
     private boolean isOnCooldown;
-    private int counter;
+    private boolean isActive;
+    private int activeCounter;
+    private int cooldownCounter;
 
-    public StatusEffect(String name, String description, int numOfRounds, int coolDown) {
+    public StatusEffect(String name, int numOfRoundsActive, int numOfRoundsCoolDown) {
         this.name = name;
-        this.description = description;
-        this.NUM_ROUNDS_ACTIVE = numOfRounds;
-        this.NUM_ROUNDS_COOLDOWN = coolDown;
-        this.counter = 0;
+        this.NUM_ROUNDS_ACTIVE = numOfRoundsActive;
+        this.NUM_ROUNDS_COOLDOWN = numOfRoundsCoolDown;
+        this.activeCounter = 0;
+        this.cooldownCounter = 0;
         this.isOnCooldown = false;
+        this.isActive = false;
     }
 
     // Mechanics
@@ -42,16 +44,29 @@ public abstract class StatusEffect {
         return NUM_ROUNDS_COOLDOWN;
     }
 
-    public int getCounter() {
-        return counter;
+    public int getActiveCounter() {
+        return activeCounter;
     }
 
-    public void setCounter(int counter) {
-        this.counter = counter;
+    public void setActiveCounter(int activeCounter) {
+        this.activeCounter = activeCounter;
     }
 
-    public void countDownByOne() {
-        this.counter--;
+    public int getCooldownCounter() {
+        return cooldownCounter;
+    }
+
+    public void setCooldownCounter(int cooldownCounter) {
+        this.cooldownCounter = cooldownCounter;
+    }
+
+
+    public void countDownByOneCooldown() {
+        this.cooldownCounter--;
+    }
+
+    public void countDownByOneActive() {
+        this.activeCounter--;
     }
 
     public boolean isOnCooldown() {
@@ -60,5 +75,13 @@ public abstract class StatusEffect {
 
     public void setOnCooldown(boolean onCooldown) {
         isOnCooldown = onCooldown;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
     }
 }

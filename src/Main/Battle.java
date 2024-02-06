@@ -6,6 +6,8 @@ import GameCharacters.GameCharacter;
 import GameCharacters.Heroes.Walt;
 import Inventories.Equippables.Jewelry.AmuletOfDahra;
 import Inventories.Equippables.Jewelry.Jewelry;
+import StatusEffects.CoolDown;
+import StatusEffects.StatusEffect;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -70,6 +72,7 @@ public class Battle {
                 // Resolving round
                 removeDeadCharacters();
                 checkForEndOfBattle();
+                updateCounters();
 
                 // End battle if all enemies are defeated
                 if (allEnemiesDefeated) {
@@ -98,6 +101,19 @@ public class Battle {
             order = new ArrayList<>(characterOrderManager.getOrder());
 
 
+        }
+    }
+
+    private void updateCounters() {
+        if (currentCharacter.hasEffect()) {
+            StatusEffect effect = currentCharacter.getEffect();
+            effect.countDownByOneCooldown();
+            effect.countDownByOneActive();
+        }
+        if (currentCharacter.getSpecialAttack() != null) {
+            if (currentCharacter.getSpecialAttack().isOnCooldown()) {
+                currentCharacter.getSpecialAttack().countDownByOne();
+            }
         }
     }
 
@@ -185,8 +201,12 @@ public class Battle {
 
         for (GameCharacter character : characterOrderManager.getOrder()) {
             if (character.hasEffect()) {
-                if (!character.getEffect().isOnCooldown()) {
+                StatusEffect effect = character.getEffect();
+
+                if (!effect.isActive() && !effect.isOnCooldown()) {
                     effectsToRemove.add(character);
+                } else if (!effect.isActive() && effect.isOnCooldown()) {
+                    character.setEffect(new CoolDown(effect));
                 }
             }
         }
