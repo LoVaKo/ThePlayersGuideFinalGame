@@ -3,7 +3,6 @@ package Attacks;
 import ActionHandler.ActionMenu;
 import Attacks.Special.SpecialAttack;
 import GameCharacters.GameCharacter;
-import Main.CooldownManager;
 import Main.Party;
 
 import java.util.Random;

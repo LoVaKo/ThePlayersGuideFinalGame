@@ -12,10 +12,7 @@ import Inventories.HealthPotion;
 import Inventories.Inventory;
 import Inventories.InventoryItem;
 import Main.Party;
-import StatusEffects.Blinded;
-import StatusEffects.CoolDown;
-import StatusEffects.Frightened;
-import StatusEffects.StatusEffect;
+import StatusEffects.*;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -65,6 +62,10 @@ public abstract class GameCharacter {
 
     public void standardAttackComputer() {
         basicAttack.useAttack(this, this.enemyParty, true);
+    }
+
+    public void specialAttackComputer() {
+        specialAttack.useAttack(this, this.enemyParty, true);
     }
 
     public void gearBasedAttackComputer() {
@@ -195,6 +196,10 @@ public abstract class GameCharacter {
         return this.effect instanceof Frightened;
     }
 
+    public boolean isFrozen() {
+        return this.effect instanceof Frozen;
+    }
+
 
     // Getters and setters
     public int getCurrentHP() {
@@ -283,5 +288,6 @@ public abstract class GameCharacter {
             System.out.println();
         }
     }
+
 
 }

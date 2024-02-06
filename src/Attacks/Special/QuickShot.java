@@ -1,7 +1,7 @@
 package Attacks.Special;
 
 import Attacks.DamageType;
-import StatusEffects.Blinded;
+import StatusEffects.Wounded;
 
 public class QuickShot extends SpecialAttack {
 
@@ -10,7 +10,7 @@ public class QuickShot extends SpecialAttack {
                 DamageType.PHYSICAL,
                 0.9,
                 3,
-                new Blinded(),
+                new Wounded(),
                 0);
     }
 

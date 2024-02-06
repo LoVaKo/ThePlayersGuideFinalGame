@@ -20,8 +20,8 @@ public class Walt extends Hero {
     }
 
 
-    public static String printCharacterInformation() {
-        return """
+    public static void printCharacterInformation() {
+        System.out.println("""
                 \n=========================== Walt the Cat ===========================
                 BASIC ATTACK:       SCRATCH (1-2)
                                     Success rate 90%
@@ -33,7 +33,7 @@ public class Walt extends Hero {
                 HP:                 20
                 INFO:               Is PURRfect. Prefers to fight without weapons.
                                     May take unexpected naps.
-                ==================================================================""";
+                ==================================================================""");
     }
 
     public boolean takeNap() {

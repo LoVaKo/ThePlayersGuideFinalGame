@@ -4,11 +4,11 @@ import ActionHandler.ActionMenu;
 import ActionHandler.ActionPicker;
 import GameCharacters.GameCharacter;
 import GameCharacters.Heroes.Walt;
+import Inventories.Equippables.Jewelry.AmuletOfDahra;
+import Inventories.Equippables.Jewelry.Jewelry;
 
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.concurrent.locks.ReadWriteLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 
 public class Battle {
@@ -50,10 +50,12 @@ public class Battle {
                 battleReport();
                 currentCharacter.checkForStatusEffect();
                 checkForEasterEgg();
+                checkForStartOfRoundEvents();
 
                 // Player picks action or computer picks action.
                 if (!currentCharacter.isDead() &&
                         !currentCharacter.isFrightened() &&
+                        !currentCharacter.isFrozen() &&
                         !skipAction) {
                     if (isComputerPlayer()) {
                         ActionPicker actionPicker = new ActionPicker(currentCharacter, currentParty);
@@ -95,6 +97,15 @@ public class Battle {
             // Back to the first character by copying updated characterorder
             order = new ArrayList<>(characterOrderManager.getOrder());
 
+
+        }
+    }
+
+    private void checkForStartOfRoundEvents() {
+        // Check for amulet of dahra
+        Jewelry jewelry = currentCharacter.getEquippedItems().getJewelry();
+        if (jewelry instanceof AmuletOfDahra amulet) {
+            amulet.getRegeneration().regenerate(currentCharacter);
 
         }
     }
@@ -166,9 +177,7 @@ public class Battle {
     }
 
     private boolean isComputerPlayer() {
-        return game.gameMode.equals(GameMode.COMPUTER_VS_COMPUTER)
-                || (game.gameMode.equals(GameMode.PLAYER_VS_COMPUTER)
-                && currentParty.equals(game.getMonsterParty()));
+        return currentCharacter.getOwnParty().equals(game.getMonsterParty());
     }
 
     private void removeRedundantStatusEffects() {

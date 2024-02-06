@@ -31,7 +31,7 @@ public class ActionPicker {
         } else if (shouldUseGearAttack()) {
             currentCharacter.gearBasedAttackComputer();
         } else if (shouldUseSpecialAttack()) {
-            currentCharacter.specialAttack();
+            currentCharacter.specialAttackComputer();
         } else if (shouldUseStandardAttack()) {
             currentCharacter.standardAttackComputer();
         } else {

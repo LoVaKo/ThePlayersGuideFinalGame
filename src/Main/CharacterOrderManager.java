@@ -12,7 +12,7 @@ public class CharacterOrderManager {
     private static final ReadWriteLock lock = new ReentrantReadWriteLock();
 
     public static void remove(GameCharacter character) {
-        lock.writeLock();
+        lock.writeLock().lock();
         try {
             characterOrder.remove(character);
         } finally {

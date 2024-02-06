@@ -34,8 +34,9 @@ public abstract class Hero extends GameCharacter {
         Scanner scanner = new Scanner(System.in);
 
         // Printing out available heroes
-        System.out.println(Walt.printCharacterInformation());
-        System.out.println(VinFletcher.printCharacterInformation());
+        Walt.printCharacterInformation();
+        Archer.printCharacterInformation();
+        Mage.printCharacterInformation();
 
         // Adding heroes to party
         boolean finishedAdding = false;
@@ -44,7 +45,8 @@ public abstract class Hero extends GameCharacter {
             System.out.println("""
                     \nPlease choose a hero to add to your party:
                     1. Walt
-                    2. Vin Fletcher
+                    2. Archer
+                    3. Mage
                     """);
             GameCharacter chosenHero = null;
             int chosenHeroNum = -1;
@@ -54,12 +56,18 @@ public abstract class Hero extends GameCharacter {
                     chosenHeroNum = scanner.nextInt();
                     scanner.nextLine(); // Consume the newline character
 
-                    if (chosenHeroNum >= 1 && chosenHeroNum <= 2) {
+                    if (chosenHeroNum >= 1 && chosenHeroNum <= 3) {
                         // Process the chosen hero
                         if (chosenHeroNum == 1) {
                             chosenHero = new Walt();
                         } else if (chosenHeroNum == 2) {
-                            chosenHero = new VinFletcher();
+                            System.out.println("What is the archer's name?");
+                            String name = scanner.nextLine();
+                            chosenHero = new Archer(name);
+                        } else if (chosenHeroNum == 3) {
+                            System.out.println("What is the Mage's name?");
+                            String name = scanner.nextLine();
+                            chosenHero = new Mage(name);
                         }
                     } else {
                         System.out.println("Please pick a number from the character list.");

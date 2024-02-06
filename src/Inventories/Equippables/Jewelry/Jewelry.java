@@ -10,4 +10,8 @@ public abstract class Jewelry extends Gear {
         super(name, level);
         this.defense = defense;
     }
+
+    public Defense getDefense() {
+        return defense;
+    }
 }
