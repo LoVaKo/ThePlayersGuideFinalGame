@@ -10,7 +10,6 @@ import statuseffects.StatusEffect;
 public abstract class SpecialAttack extends Attack {
     private final StatusEffect effect;
     private final int NUM_ROUNDS_COOLDOWN;
-    private final CooldownManager cooldownManager = main.Battle.getCooldownManager();
     private boolean isOnCooldown;
     private int counter;
 

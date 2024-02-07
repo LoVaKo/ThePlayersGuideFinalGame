@@ -22,4 +22,9 @@ public class RaiseShade extends BasicAttack {
         CharacterOrderManager.add(shade);
         // A shade is a type of GameCharacter and Monster, when a new instance is formed it is added to MonsterParty
     }
+
+    @Override
+    protected int getBaseDamage() {
+        return 0;
+    }
 }

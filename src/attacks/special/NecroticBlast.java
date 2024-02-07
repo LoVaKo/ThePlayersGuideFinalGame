@@ -15,7 +15,7 @@ public class NecroticBlast extends SpecialAttack {
     }
 
     @Override
-    protected int calculateAttackDamage() {
+    protected int getBaseDamage() {
         return MAX_DAMAGE;
     }
 }

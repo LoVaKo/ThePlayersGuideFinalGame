@@ -2,16 +2,16 @@ package attacks.basic;
 
 import attacks.DamageType;
 
-public class Stab extends BasicAttack {
-    public Stab() {
-        super("Stab",
+public class Slash extends BasicAttack{
+    public Slash() {
+        super(  "Slash",
                 DamageType.PHYSICAL,
                 1.0,
                 3);
     }
 
     @Override
-    public int getBaseDamage() {
-        return 1;
+    protected int getBaseDamage() {
+        return 3;
     }
 }

@@ -4,6 +4,9 @@ import actionhandler.ActionMenu;
 import attacks.special.SpecialAttack;
 import gamecharacters.GameCharacter;
 import gamecharacters.Party;
+import main.CooldownManager;
+import statuseffects.Frozen;
+import statuseffects.Inspired;
 
 import java.util.Random;
 import java.util.Scanner;
@@ -14,6 +17,8 @@ public abstract class Attack {
     protected String name;
     protected DamageType damageType;
 
+    protected final CooldownManager cooldownManager = main.Battle.getCooldownManager();
+
     public Attack(String name, DamageType damageType, double successRate, int MAX_DAMAGE) {
         this.name = name;
         this.damageType = damageType;
@@ -21,7 +26,7 @@ public abstract class Attack {
         this.MAX_DAMAGE = MAX_DAMAGE;
     }
 
-    public void useAttack(GameCharacter character, Party enemyParty, boolean isComputer) {
+    public void useAttack(GameCharacter currentCharacter, Party enemyParty, boolean isComputer) {
         // If it's the computer's turn, computer picks target
         GameCharacter target = isComputer ? pickTargetComputer(enemyParty) : null;
 
@@ -30,7 +35,7 @@ public abstract class Attack {
             int pickedChoice = this.pickTarget(enemyParty);
             if (pickedChoice == 0) {
                 // If player picked 0, go back to ActionMenu
-                ActionMenu menu = new ActionMenu(character);
+                ActionMenu menu = new ActionMenu(currentCharacter);
                 menu.print();
                 menu.pickAction();
                 return;
@@ -40,52 +45,43 @@ public abstract class Attack {
         }
 
         // Use attack
-        System.out.println(character + " used " + this.name + " on " + target);
+        System.out.println(currentCharacter + " used " + this.name + " on " + target);
 
         // Resolve attack
         if (isSuccessful()) {
-            // Calculate attack damage
-            int damage = calculateAttackDamage();
 
-            // Check for character defenses and adjust damage accordingly
-            if (target.hasDefense()) {
-                int damagereduction = target.getDefense().activate(this.damageType);
-
-                if (damagereduction >= damage) {
-                    System.out.println("No damage was done!");
-                    return;
-                } else {
-                    damage -= damagereduction;
-                }
-            }
-
-
-            // Resolving damage done
+            // If the attack deals damage, resolve damage done
             if (MAX_DAMAGE > 0) {
-                System.out.println(this.name + " dealt " + damage + " damage to " + target);
+                int damage = calculateAttackDamage(currentCharacter, target);
 
-                if (damage < target.getCurrentHP()) {
-                    target.setCurrentHP(target.getCurrentHP() - damage);
-                    System.out.println(target + " is now at " + target.getCurrentHP() + "/" + target.getStartingHP() + " HP.");
+                if (damage == 0) {
+                    System.out.println("No damage was done!");
                 } else {
-                    System.out.println(target + " has been defeated!");
+                    System.out.println(this.name + " dealt " + damage + " damage to " + target);
 
-                    if (target.getEquippedItems().hasGear()) target.lootCharacter(character);
-                    target.resolveDeath();
+                    if (damage < target.getCurrentHP()) {
+                        target.setCurrentHP(target.getCurrentHP() - damage);
+                        System.out.println(target + " is now at " + target.getCurrentHP() + "/" + target.getStartingHP() + " HP.");
+                    } else {
+                        System.out.println(target + " has been defeated!");
+
+                        if (target.getEquippedItems().hasGear()) target.lootCharacter(currentCharacter);
+                        target.resolveDeath();
+                    }
                 }
             }
 
             // Resolve Special Attack
             if (this instanceof SpecialAttack
-                    && !character.isDead()) {
+                    && !target.isDead()) {
                 ((SpecialAttack) this).resolveEffect(target);
             }
 
         } else {
-            System.out.println(character.getName() + " missed!");
+            System.out.println(currentCharacter.getName() + " missed!");
         }
 
-        // Whether attack is successful or not, add to cooldownmanager when necessary
+        // Whether attack is successful or not, add to cooldown manager when necessary
         if (this instanceof SpecialAttack) {
             ((SpecialAttack) this).addToCooldownManager();
         }
@@ -135,8 +131,39 @@ public abstract class Attack {
         return enemyParty.getCharacter(indexOfChoice);
     }
 
-    protected int calculateAttackDamage() {
-        return 0;
+    protected abstract int getBaseDamage();
+
+    private int calculateAttackDamage(GameCharacter currentCharacter, GameCharacter target){
+        int baseDamage = getBaseDamage();
+        int defenseModifier = getDefenseModifier(target);
+        int effectModifier = getEffectModifier(currentCharacter, target);
+
+        return baseDamage + defenseModifier + effectModifier;
+    }
+
+    private int getDefenseModifier(GameCharacter target) {
+        if (target.hasDefense()) {
+            return -target.getDefense().activate(this.damageType);
+        } else {
+            return 0;
+        }
+    }
+
+    private int getEffectModifier(GameCharacter currentCharacter, GameCharacter target) {
+        int effectModifier = 0;
+        if (currentCharacter.hasEffect()) {
+            if (currentCharacter.getEffect() instanceof Inspired) {
+                System.out.println(currentCharacter.getName() + " is Inspired. Damage is increased by 1.");
+                effectModifier = effectModifier + 1;
+            }
+        }
+        if (target.hasEffect()) {
+            if (target.getEffect() instanceof Frozen && this.damageType == DamageType.PHYSICAL) {
+                System.out.println(target.getName() + " is frozen and less susceptible to physical damage. Damage is reduced by 1.");
+                effectModifier = effectModifier - 1;
+            }
+        }
+        return effectModifier;
     }
 
     public boolean isSuccessful() {

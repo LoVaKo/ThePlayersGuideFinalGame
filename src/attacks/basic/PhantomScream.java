@@ -11,7 +11,7 @@ public class PhantomScream extends BasicAttack {
     }
 
     @Override
-    protected int calculateAttackDamage() {
+    protected int getBaseDamage() {
         return 1;
     }
 }

@@ -15,7 +15,7 @@ public class FrostStorm extends SpecialAttack {
     }
 
     @Override
-    protected int calculateAttackDamage() {
+    protected int getBaseDamage() {
         return 3;
     }
 }

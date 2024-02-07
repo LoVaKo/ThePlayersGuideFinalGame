@@ -13,7 +13,7 @@ public class LightningBolt extends BasicAttack {
     }
 
     @Override
-    protected int calculateAttackDamage() {
+    protected int getBaseDamage() {
         Random random = new Random();
         return random.nextInt(2) + 2;
     }

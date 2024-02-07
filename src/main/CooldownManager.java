@@ -46,7 +46,6 @@ public class CooldownManager {
     }
 
     public void updateCooldowns() {
-        // Reduce counter on all objects by 1
         // When the counter reaches zero, remove object from countdown.
         for (StatusEffect effect : statusEffectCooldown) {
             if (effect.getCooldownCounter() == 0) {

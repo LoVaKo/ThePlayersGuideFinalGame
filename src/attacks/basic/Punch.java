@@ -12,7 +12,7 @@ public class Punch extends BasicAttack {
     }
 
     @Override
-    public int calculateAttackDamage() {
+    public int getBaseDamage() {
         return 1;
     }
 }

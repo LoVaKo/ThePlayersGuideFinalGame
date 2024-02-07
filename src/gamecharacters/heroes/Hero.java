@@ -34,6 +34,7 @@ public abstract class Hero extends GameCharacter {
         Scanner scanner = new Scanner(System.in);
 
         // Printing out available heroes
+        Knight.printCharacterInformation();
         Archer.printCharacterInformation();
         Mage.printCharacterInformation();
 
@@ -43,7 +44,7 @@ public abstract class Hero extends GameCharacter {
         while (heroParty.getCharacters().size() < 5 && !finishedAdding) {
             System.out.println("""
                     \nPlease choose a hero to add to your party:
-                    1. Walt
+                    1. Knight
                     2. Archer
                     3. Mage
                     """);
@@ -58,7 +59,9 @@ public abstract class Hero extends GameCharacter {
                     if (chosenHeroNum >= 1 && chosenHeroNum <= 3) {
                         // Process the chosen hero
                         if (chosenHeroNum == 1) {
-                            chosenHero = new Archer("Previously Walt");
+                            System.out.println("What is the Knight's name?");
+                            String name = scanner.nextLine();
+                            chosenHero = new Knight(name);
                         } else if (chosenHeroNum == 2) {
                             System.out.println("What is the archer's name?");
                             String name = scanner.nextLine();
@@ -97,4 +100,5 @@ public abstract class Hero extends GameCharacter {
         heroParty.addInventoryItem(new HealthPotion());
         heroParty.addInventoryItem(new HealthPotion());
     }
+
 }

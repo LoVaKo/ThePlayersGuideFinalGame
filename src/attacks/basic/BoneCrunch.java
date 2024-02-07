@@ -13,7 +13,7 @@ public class BoneCrunch extends BasicAttack {
     }
 
     @Override
-    public int calculateAttackDamage() {
+    public int getBaseDamage() {
         Random random = new Random();
         return random.nextInt(3) + 1;
     }

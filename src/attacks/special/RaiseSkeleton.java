@@ -30,4 +30,9 @@ public class RaiseSkeleton extends SpecialAttack {
             System.out.println(character.getName() + " made a huge mistake... the Skeleton turns against the heroes!");
         }
     }
+
+    @Override
+    protected int getBaseDamage() {
+        return 0;
+    }
 }
