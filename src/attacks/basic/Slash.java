@@ -2,9 +2,9 @@ package attacks.basic;
 
 import attacks.DamageType;
 
-public class Slash extends BasicAttack{
+public class Slash extends BasicAttack {
     public Slash() {
-        super(  "Slash",
+        super("Slash",
                 DamageType.PHYSICAL,
                 1.0,
                 3);

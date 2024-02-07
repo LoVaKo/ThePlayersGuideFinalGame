@@ -13,11 +13,10 @@ import java.util.Scanner;
 
 public abstract class Attack {
     public final int MAX_DAMAGE;
+    protected final CooldownManager cooldownManager = main.Battle.getCooldownManager();
     private final double SUCCESS_RATE;
     protected String name;
     protected DamageType damageType;
-
-    protected final CooldownManager cooldownManager = main.Battle.getCooldownManager();
 
     public Attack(String name, DamageType damageType, double successRate, int MAX_DAMAGE) {
         this.name = name;
@@ -133,7 +132,7 @@ public abstract class Attack {
 
     protected abstract int getBaseDamage();
 
-    private int calculateAttackDamage(GameCharacter currentCharacter, GameCharacter target){
+    private int calculateAttackDamage(GameCharacter currentCharacter, GameCharacter target) {
         int baseDamage = getBaseDamage();
         int defenseModifier = getDefenseModifier(target);
         int effectModifier = getEffectModifier(currentCharacter, target);

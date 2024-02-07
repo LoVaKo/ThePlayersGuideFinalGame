@@ -3,7 +3,6 @@ package attacks.special;
 import attacks.Attack;
 import attacks.DamageType;
 import gamecharacters.GameCharacter;
-import main.CooldownManager;
 import statuseffects.CoolDown;
 import statuseffects.StatusEffect;
 

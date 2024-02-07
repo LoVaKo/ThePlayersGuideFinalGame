@@ -6,9 +6,9 @@ import gamecharacters.Party;
 import statuseffects.Inspired;
 import statuseffects.StatusEffect;
 
-public class RallyForTheKing extends SpecialAttack{
+public class RallyForTheKing extends SpecialAttack {
     public RallyForTheKing() {
-        super(  "Rally for the King",
+        super("Rally for the King",
                 DamageType.NONE,
                 0.8,
                 0,
@@ -33,8 +33,8 @@ public class RallyForTheKing extends SpecialAttack{
                 int cooldownCounter = effect.getCooldownCounter();
                 int activeCounter = effect.getActiveCounter();
 
-                effect.setCooldownCounter(cooldownCounter+1);
-                effect.setActiveCounter(activeCounter+1);
+                effect.setCooldownCounter(cooldownCounter + 1);
+                effect.setActiveCounter(activeCounter + 1);
             }
         }
     }

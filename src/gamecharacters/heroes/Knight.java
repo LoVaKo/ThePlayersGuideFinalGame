@@ -6,9 +6,9 @@ import inventory.equippables.armor.IronArmor;
 import inventory.equippables.weapons.IronSword;
 import inventory.equippables.weapons.WeaponType;
 
-public class Knight extends Hero{
+public class Knight extends Hero {
     public Knight(String name) {
-        super(  name + " the Knight",
+        super(name + " the Knight",
                 new Punch(),
                 new RallyForTheKing(),
                 null,

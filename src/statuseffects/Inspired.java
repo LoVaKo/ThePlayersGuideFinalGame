@@ -2,9 +2,9 @@ package statuseffects;
 
 import gamecharacters.GameCharacter;
 
-public class Inspired extends StatusEffect{
+public class Inspired extends StatusEffect {
     public Inspired() {
-        super(  "Inspired",
+        super("Inspired",
                 1,
                 1);
     }
