@@ -1,7 +1,7 @@
 package gamecharacters.monsters;
 
-import attacks.basic.RaiseShade;
-import attacks.special.NecroticBlast;
+import attacks.effect.NecroticBlast;
+import attacks.special.RaiseShade;
 import inventory.equippables.jewelry.BonyAmulet;
 import inventory.equippables.weapons.StaffOfResurrection;
 import inventory.equippables.weapons.WeaponType;
@@ -11,6 +11,7 @@ public class Necromancer extends Monster {
         super("Necromancer",
                 new RaiseShade(),
                 new NecroticBlast(),
+                null,
                 null,
                 15,
                 5,

@@ -1,15 +1,16 @@
 package gamecharacters.heroes;
 
 import attacks.basic.LightningBolt;
-import attacks.special.FrostStorm;
+import attacks.effect.FrostStorm;
 import inventory.equippables.jewelry.AmuletOfDahra;
 import inventory.equippables.weapons.WeaponType;
 
 public class Mage extends Hero {
     public Mage(String name) {
-        super(name + " The Mage",
+        super(name + " the Mage",
                 new LightningBolt(),
                 new FrostStorm(),
+                null,
                 null,
                 10,
                 WeaponType.MAGICAL);

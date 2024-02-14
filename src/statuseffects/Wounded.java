@@ -11,7 +11,7 @@ public class Wounded extends StatusEffect {
     }
 
     @Override
-    public void apply(GameCharacter character) {
+    public void execute(GameCharacter character) {
         System.out.println(character.getName() + "'s bloodloss causes 1 damage.");
         int damage = 1;
 

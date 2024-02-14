@@ -11,7 +11,7 @@ public class RaiseSkeleton extends SpecialAttack {
     public RaiseSkeleton() {
         super("raise skeleton",
                 DamageType.MAGICAL,
-                50,
+                0.5,
                 0,
                 null,
                 3);

@@ -1,6 +1,7 @@
 package attacks;
 
 import actionhandler.ActionMenu;
+import attacks.effect.EffectAttack;
 import attacks.special.SpecialAttack;
 import gamecharacters.GameCharacter;
 import gamecharacters.Party;
@@ -17,6 +18,7 @@ public abstract class Attack {
     private final double SUCCESS_RATE;
     protected String name;
     protected DamageType damageType;
+
 
     public Attack(String name, DamageType damageType, double successRate, int MAX_DAMAGE) {
         this.name = name;
@@ -71,9 +73,9 @@ public abstract class Attack {
             }
 
             // Resolve Special Attack
-            if (this instanceof SpecialAttack
+            if (this instanceof EffectAttack
                     && !target.isDead()) {
-                ((SpecialAttack) this).resolveEffect(target);
+                ((EffectAttack) this).resolveEffect(target);
             }
 
         } else {
@@ -81,8 +83,8 @@ public abstract class Attack {
         }
 
         // Whether attack is successful or not, add to cooldown manager when necessary
-        if (this instanceof SpecialAttack) {
-            ((SpecialAttack) this).addToCooldownManager();
+        if (this instanceof EffectAttack) {
+            ((EffectAttack) this).addToCooldownManager();
         }
 
     }
@@ -165,6 +167,21 @@ public abstract class Attack {
         return effectModifier;
     }
 
+    public int getAttackSlot(GameCharacter character) {
+        if (this.equals(character.getAttack1())) {
+            return 1;
+        } else if (this.equals(character.getAttack2())) {
+            return 2;
+        } else if (this.equals(character.getAttack3())) {
+            return 3;
+        } else if (character.getEquippedItems().hasWeapon()) {
+            if (this.equals(character.getEquippedItems().getWeapon().getAttack())) {
+                return 4;
+            }
+        }
+        return 0;
+    }
+
     public boolean isSuccessful() {
         Random random = new Random();
         double rollForSuccess = random.nextDouble();
@@ -173,6 +190,17 @@ public abstract class Attack {
 
     public String getName() {
         return this.name;
+    }
+
+
+    public boolean isOnCooldown() {
+        if (this instanceof EffectAttack) {
+            return this.isOnCooldown();
+        } else if (this instanceof SpecialAttack) {
+            return this.isOnCooldown();
+        } else {
+            return false;
+        }
     }
 
     @Override

@@ -11,7 +11,7 @@ public class Blinded extends StatusEffect {
     }
 
     @Override
-    public void apply(GameCharacter character) {
+    public void execute(GameCharacter character) {
         System.out.println(character.getName() + " is unable to see and can't perform any attacks.");
     }
 }

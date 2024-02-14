@@ -1,4 +1,4 @@
-package attacks.basic;
+package attacks.special;
 
 import attacks.DamageType;
 import gamecharacters.GameCharacter;
@@ -6,11 +6,13 @@ import gamecharacters.Party;
 import gamecharacters.monsters.Shade;
 import main.CharacterOrderManager;
 
-public class RaiseShade extends BasicAttack {
+public class RaiseShade extends SpecialAttack {
     public RaiseShade() {
         super("Raise Shade",
                 DamageType.MAGICAL,
                 0.9,
+                0,
+                null,
                 0);
     }
 

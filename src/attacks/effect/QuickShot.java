@@ -1,9 +1,9 @@
-package attacks.special;
+package attacks.effect;
 
 import attacks.DamageType;
 import statuseffects.Wounded;
 
-public class QuickShot extends SpecialAttack {
+public class QuickShot extends EffectAttack {
 
     public QuickShot() {
         super("Quick Shot",

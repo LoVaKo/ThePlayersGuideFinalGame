@@ -27,7 +27,7 @@ public abstract class StatusEffect {
         return name.toLowerCase();
     }
 
-    public void apply(GameCharacter character) {
+    public void execute(GameCharacter character) {
 
     }
 

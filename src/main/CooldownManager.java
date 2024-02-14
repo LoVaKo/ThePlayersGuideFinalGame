@@ -1,24 +1,24 @@
 package main;
 
-import attacks.special.SpecialAttack;
+import attacks.effect.EffectAttack;
 import statuseffects.StatusEffect;
 
 import java.util.ArrayList;
 
 public class CooldownManager {
 
-    private final ArrayList<SpecialAttack> specialAttackCooldown = new ArrayList<>();
+    private final ArrayList<EffectAttack> specialAttackCooldown = new ArrayList<>();
     private final ArrayList<StatusEffect> activeStatusEffects = new ArrayList<>();
     private final ArrayList<StatusEffect> statusEffectCooldown = new ArrayList<>();
-    private final ArrayList<SpecialAttack> attacksToBeRemoved = new ArrayList<>();
+    private final ArrayList<EffectAttack> attacksToBeRemoved = new ArrayList<>();
     private final ArrayList<StatusEffect> activeEffectsToBeRemoved = new ArrayList<>();
     private final ArrayList<StatusEffect> cooldownEffectsToBeRemoved = new ArrayList<>();
 
 
     public void add(Object object) {
 
-        if (object instanceof SpecialAttack) {
-            addSpecialAttack((SpecialAttack) object);
+        if (object instanceof EffectAttack) {
+            addSpecialAttack((EffectAttack) object);
         } else if (object instanceof StatusEffect) {
             addStatusEffect((StatusEffect) object);
         }
@@ -35,7 +35,7 @@ public class CooldownManager {
             effect.setActive(false);
         }
 
-        for (SpecialAttack attack : attacksToBeRemoved) {
+        for (EffectAttack attack : attacksToBeRemoved) {
             specialAttackCooldown.remove(attack);
             attack.setOnCooldown(false);
         }
@@ -59,7 +59,7 @@ public class CooldownManager {
             }
         }
 
-        for (SpecialAttack attack : specialAttackCooldown) {
+        for (EffectAttack attack : specialAttackCooldown) {
             if (attack.getCounter() == 0) {
                 attacksToBeRemoved.add(attack);
             }
@@ -77,7 +77,7 @@ public class CooldownManager {
         activeStatusEffects.clear();
     }
 
-    public void addSpecialAttack(SpecialAttack attack) {
+    public void addSpecialAttack(EffectAttack attack) {
         specialAttackCooldown.add(attack);
         attack.setOnCooldown(true);
         attack.setCounter(attack.getNUM_ROUNDS_COOLDOWN());

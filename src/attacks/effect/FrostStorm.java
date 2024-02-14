@@ -1,10 +1,10 @@
-package attacks.special;
+package attacks.effect;
 
 import attacks.DamageType;
 import statuseffects.Frozen;
 
 
-public class FrostStorm extends SpecialAttack {
+public class FrostStorm extends EffectAttack {
     public FrostStorm() {
         super("Frost Storm",
                 DamageType.MAGICAL,

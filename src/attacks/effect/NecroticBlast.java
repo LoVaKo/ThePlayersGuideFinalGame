@@ -1,9 +1,9 @@
-package attacks.special;
+package attacks.effect;
 
 import attacks.DamageType;
 import statuseffects.Frightened;
 
-public class NecroticBlast extends SpecialAttack {
+public class NecroticBlast extends EffectAttack {
 
     public NecroticBlast() {
         super("Necrotic Blast",

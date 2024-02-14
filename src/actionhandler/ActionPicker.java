@@ -1,6 +1,6 @@
 package actionhandler;
 
-import attacks.special.SpecialAttack;
+import attacks.effect.EffectAttack;
 import gamecharacters.GameCharacter;
 import gamecharacters.Party;
 import inventory.Inventory;
@@ -8,6 +8,7 @@ import inventory.InventoryItem;
 import inventory.equippables.armor.Armor;
 import inventory.equippables.jewelry.Jewelry;
 import inventory.equippables.weapons.Weapon;
+import statuseffects.Blinded;
 
 import java.util.Random;
 
@@ -91,24 +92,25 @@ public class ActionPicker {
 
     private boolean shouldUseGearAttack() {
         if (currentCharacter.getEquippedItems().getWeapon() != null) {
-            if (currentCharacter.getEquippedItems().getWeapon().getAttack() instanceof SpecialAttack selectedAttack) {
+            if (currentCharacter.getEquippedItems().getWeapon().getAttack() instanceof EffectAttack selectedAttack) {
                 if (selectedAttack.isOnCooldown()) return false;
             }
         }
 
 
         return currentCharacter.getEquippedItems().hasWeapon()
-                && currentCharacter.getStandardAttack().MAX_DAMAGE <= currentCharacter.getEquippedItems().getWeapon().getAttack().MAX_DAMAGE
-                && !currentCharacter.isBlinded();
+                && currentCharacter.getAttack1().MAX_DAMAGE <= currentCharacter.getEquippedItems().getWeapon().getAttack().MAX_DAMAGE
+                && !(currentCharacter.getEffect() instanceof Blinded);
     }
 
     private boolean shouldUseSpecialAttack() {
-        return !currentCharacter.isBlinded() &&
-                currentCharacter.getSpecialAttack() != null &&
-                !currentCharacter.getSpecialAttack().isOnCooldown();
+
+        return !(currentCharacter.getEffect() instanceof Blinded) &&
+                currentCharacter.getAttack2() != null &&
+                !currentCharacter.getAttack2().isOnCooldown();
     }
 
     private boolean shouldUseStandardAttack() {
-        return !currentCharacter.isBlinded();
+        return !(currentCharacter.getEffect() instanceof Blinded);
     }
 }

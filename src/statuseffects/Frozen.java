@@ -10,7 +10,7 @@ public class Frozen extends StatusEffect {
     }
 
     @Override
-    public void apply(GameCharacter character) {
+    public void execute(GameCharacter character) {
         System.out.println("Frozen solid, " + character.getName() + " is unable to perform any actions for two rounds.");
     }
 }

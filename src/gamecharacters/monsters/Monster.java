@@ -1,21 +1,23 @@
 package gamecharacters.monsters;
 
-import attacks.basic.BasicAttack;
-import attacks.special.SpecialAttack;
+import attacks.Attack;
 import defenses.Defense;
 import gamecharacters.GameCharacter;
 import gamecharacters.Party;
+import inventory.equippables.weapons.Dagger;
 import inventory.equippables.weapons.WeaponType;
+import inventory.usables.HealthPotion;
 import main.Game;
 
 public abstract class Monster extends GameCharacter {
     private static final Party monsterParty = new Party();
     final int level;
 
-    public Monster(String name, BasicAttack basicAttack, SpecialAttack specialAttack, Defense defense, int hP, int level, WeaponType preferredWeaponType) {
+    public Monster(String name, Attack attack1, Attack attack2, Attack attack3, Defense defense, int hP, int level, WeaponType preferredWeaponType) {
         super(name,
-                basicAttack,
-                specialAttack,
+                attack1,
+                attack2,
+                attack3,
                 defense,
                 monsterParty,
                 gamecharacters.heroes.Hero.getHeroParty(),
@@ -31,7 +33,9 @@ public abstract class Monster extends GameCharacter {
 
     public static void setupMonsterParty(int numOfHeroes, Game game) {
         new Necromancer();
-        //new Skeleton();
+        new Shade();
+        monsterParty.addInventoryItem(new Dagger());
+        monsterParty.addInventoryItem(new HealthPotion());
 
 //        int numOfSkeletons = 0;
 //        int numOfHealthPotions = 0;

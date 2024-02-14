@@ -1,6 +1,6 @@
 package inventory.equippables.weapons;
 
-import attacks.special.QuickShot;
+import attacks.effect.QuickShot;
 
 public class Bow extends Weapon {
     public Bow() {

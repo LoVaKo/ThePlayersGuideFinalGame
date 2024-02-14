@@ -12,6 +12,7 @@ public class Knight extends Hero {
                 new Punch(),
                 new RallyForTheKing(),
                 null,
+                null,
                 20,
                 WeaponType.MELEE);
         new IronSword().equipUponCreation(this);

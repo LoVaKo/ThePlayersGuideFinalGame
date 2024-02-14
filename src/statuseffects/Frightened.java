@@ -10,7 +10,7 @@ public class Frightened extends StatusEffect {
     }
 
     @Override
-    public void apply(GameCharacter character) {
+    public void execute(GameCharacter character) {
         System.out.println("Frozen in shock, " + character.getName() + " is unable to perform any actions.");
     }
 }

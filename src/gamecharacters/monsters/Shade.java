@@ -10,6 +10,7 @@ public class Shade extends Monster {
                 new PhantomScream(),
                 null,
                 null,
+                null,
                 3,
                 1,
                 WeaponType.NONE);

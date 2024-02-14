@@ -9,8 +9,9 @@ public class Archer extends Hero {
 
     public Archer(String name) {
         super(
-                name + " The Archer",
+                name + " the Archer",
                 new Punch(),
+                null,
                 null,
                 null,
                 15,

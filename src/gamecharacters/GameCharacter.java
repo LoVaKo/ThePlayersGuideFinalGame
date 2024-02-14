@@ -2,8 +2,6 @@ package gamecharacters;
 
 import actionhandler.ActionMenu;
 import attacks.Attack;
-import attacks.basic.BasicAttack;
-import attacks.special.SpecialAttack;
 import defenses.Defense;
 import inventory.Inventory;
 import inventory.InventoryItem;
@@ -13,7 +11,8 @@ import inventory.equippables.weapons.WeaponType;
 import inventory.usables.HealthPotion;
 import main.Battle;
 import main.CharacterOrderManager;
-import statuseffects.*;
+import statuseffects.CoolDown;
+import statuseffects.StatusEffect;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -21,8 +20,9 @@ import java.util.Scanner;
 public abstract class GameCharacter {
     private final static CharacterOrderManager characterOrderManager = Battle.getCharacterOrderManager();
     protected final String name;
-    protected final BasicAttack basicAttack;
-    protected final SpecialAttack specialAttack;
+    protected final Attack attack1;
+    protected final Attack attack2;
+    protected final Attack attack3;
     protected final WeaponType preferredWeaponType;
     protected final Defense defense;
     protected final Party ownParty;
@@ -35,10 +35,11 @@ public abstract class GameCharacter {
 
 
     // Constructor
-    public GameCharacter(String name, BasicAttack basicAttack, SpecialAttack specialAttack, Defense defense, Party ownParty, Party enemyParty, int hP, WeaponType preferredWeaponType) {
+    public GameCharacter(String name, Attack attack1, Attack attack2, Attack attack3, Defense defense, Party ownParty, Party enemyParty, int hP, WeaponType preferredWeaponType) {
         this.name = name;
-        this.basicAttack = basicAttack;
-        this.specialAttack = specialAttack;
+        this.attack1 = attack1;
+        this.attack2 = attack2;
+        this.attack3 = attack3;
         this.defense = defense;
         this.ownParty = ownParty;
         this.enemyParty = enemyParty;
@@ -50,24 +51,28 @@ public abstract class GameCharacter {
     }
 
     // ACTIONS
-    public void standardAttack() {
-        basicAttack.useAttack(this, this.enemyParty, false);
+    public void useAttack1() {
+        attack1.useAttack(this, this.enemyParty, false);
     }
 
-    public void specialAttack() {
-        specialAttack.useAttack(this, this.enemyParty, false);
+    public void useAttack2() {
+        attack2.useAttack(this, this.enemyParty, false);
     }
 
-    public void gearBasedAttack() {
+    public void useAttack3() {
+        attack3.useAttack(this, this.enemyParty, false);
+    }
+
+    public void useGearBasedAttack() {
         this.equippedItems.getWeapon().getAttack().useAttack(this, this.enemyParty, false);
     }
 
     public void standardAttackComputer() {
-        basicAttack.useAttack(this, this.enemyParty, true);
+        attack1.useAttack(this, this.enemyParty, true);
     }
 
     public void specialAttackComputer() {
-        specialAttack.useAttack(this, this.enemyParty, true);
+        attack2.useAttack(this, this.enemyParty, true);
     }
 
     public void gearBasedAttackComputer() {
@@ -214,19 +219,6 @@ public abstract class GameCharacter {
         }
     }
 
-    // Status Effects
-    public boolean isBlinded() {
-        return this.effect instanceof Blinded;
-    }
-
-    public boolean isFrightened() {
-        return this.effect instanceof Frightened;
-    }
-
-    public boolean isFrozen() {
-        return this.effect instanceof Frozen;
-    }
-
 
     // Getters and setters
     public int getCurrentHP() {
@@ -261,12 +253,16 @@ public abstract class GameCharacter {
         return name;
     }
 
-    public Attack getStandardAttack() {
-        return basicAttack;
+    public Attack getAttack1() {
+        return attack1;
     }
 
-    public SpecialAttack getSpecialAttack() {
-        return specialAttack;
+    public Attack getAttack2() {
+        return attack2;
+    }
+
+    public Attack getAttack3() {
+        return attack3;
     }
 
     public String getCharacterReport() {
@@ -315,7 +311,7 @@ public abstract class GameCharacter {
         if (this.hasEffect()) {
             if (!(this.getEffect() instanceof CoolDown)) {
                 System.out.println(this.name + " is " + this.effect.getName() + "!");
-                this.effect.apply(this);
+                this.effect.execute(this);
                 System.out.println("Remaining number of rounds: " + (this.effect.getActiveCounter() - 1));
                 System.out.println();
             }

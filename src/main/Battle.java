@@ -2,11 +2,16 @@ package main;
 
 import actionhandler.ActionMenu;
 import actionhandler.ActionPicker;
+import attacks.Attack;
+import attacks.effect.EffectAttack;
+import attacks.special.SpecialAttack;
 import gamecharacters.GameCharacter;
 import gamecharacters.Party;
 import inventory.equippables.jewelry.AmuletOfDahra;
 import inventory.equippables.jewelry.Jewelry;
 import statuseffects.CoolDown;
+import statuseffects.Frightened;
+import statuseffects.Frozen;
 import statuseffects.StatusEffect;
 
 import java.util.ArrayList;
@@ -58,8 +63,8 @@ public class Battle {
 
                 // Player picks action or computer picks action.
                 if (!currentCharacter.isDead() &&
-                        !currentCharacter.isFrightened() &&
-                        !currentCharacter.isFrozen() &&
+                        !(currentCharacter.getEffect() instanceof Frightened) &&
+                        !(currentCharacter.getEffect() instanceof Frozen) &&
                         !skipAction) {
                     if (isComputerPlayer()) {
                         ActionPicker actionPicker = new ActionPicker(currentCharacter, currentParty);
@@ -112,9 +117,18 @@ public class Battle {
             effect.countDownByOneCooldown();
             effect.countDownByOneActive();
         }
-        if (currentCharacter.getSpecialAttack() != null) {
-            if (currentCharacter.getSpecialAttack().isOnCooldown()) {
-                currentCharacter.getSpecialAttack().countDownByOne();
+
+        ArrayList<Attack> attackList = new ArrayList<>();
+        attackList.add(currentCharacter.getAttack1());
+        attackList.add(currentCharacter.getAttack2());
+        attackList.add(currentCharacter.getAttack3());
+        if (currentCharacter.getEquippedItems().hasWeapon()) {
+            attackList.add(currentCharacter.getEquippedItems().getWeapon().getAttack());
+        }
+
+        for (Attack attack : attackList) {
+            if (attack instanceof EffectAttack) {
+                ((EffectAttack) attack).countDownByOne();
             }
         }
     }

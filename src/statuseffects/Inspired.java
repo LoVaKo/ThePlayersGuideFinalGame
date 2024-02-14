@@ -10,7 +10,7 @@ public class Inspired extends StatusEffect {
     }
 
     @Override
-    public void apply(GameCharacter character) {
-        System.out.println();
+    public void execute(GameCharacter character) {
+        System.out.println(character.getName() + " is Inspired and will deal 1 extra damage this round.");
     }
 }
