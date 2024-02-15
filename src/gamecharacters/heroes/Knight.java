@@ -21,7 +21,7 @@ public class Knight extends Hero {
 
     public static void printCharacterInformation() {
         System.out.println("""
-                \n=========================== The Mage ===========================
+                \n=========================== The Knight ===========================
                 BASIC ATTACK:       PUNCH (1 damage)
                                     Success rate 100%
                 GEAR BASED ATTACK:  Slash (3)

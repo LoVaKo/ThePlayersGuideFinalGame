@@ -19,7 +19,7 @@ public class Mage extends Hero {
 
     public static void printCharacterInformation() {
         System.out.println("""
-                \n=========================== The Mage ===========================
+                \n=========================== The Mage =============================
                 BASIC ATTACK:       LIGHTNING BOLT (2-3)
                                     Success rate 75%
                 ATTACK:             FROST STORM (3)

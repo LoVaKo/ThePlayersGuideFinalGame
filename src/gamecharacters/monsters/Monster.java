@@ -4,7 +4,6 @@ import attacks.Attack;
 import defenses.Defense;
 import gamecharacters.GameCharacter;
 import gamecharacters.Party;
-import inventory.equippables.weapons.Dagger;
 import inventory.equippables.weapons.WeaponType;
 import inventory.usables.HealthPotion;
 import main.Game;
@@ -32,9 +31,8 @@ public abstract class Monster extends GameCharacter {
     }
 
     public static void setupMonsterParty(int numOfHeroes, Game game) {
-        new Necromancer();
-        new Shade();
-        monsterParty.addInventoryItem(new Dagger());
+        new Goblin();
+
         monsterParty.addInventoryItem(new HealthPotion());
 
 //        int numOfSkeletons = 0;

@@ -4,7 +4,6 @@ import actionhandler.ActionMenu;
 import actionhandler.ActionPicker;
 import attacks.Attack;
 import attacks.effect.EffectAttack;
-import attacks.special.SpecialAttack;
 import gamecharacters.GameCharacter;
 import gamecharacters.Party;
 import inventory.equippables.jewelry.AmuletOfDahra;
