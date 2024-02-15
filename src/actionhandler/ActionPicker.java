@@ -1,5 +1,6 @@
 package actionhandler;
 
+import attacks.Attack;
 import attacks.effect.EffectAttack;
 import gamecharacters.GameCharacter;
 import gamecharacters.Party;
@@ -9,7 +10,11 @@ import inventory.equippables.armor.Armor;
 import inventory.equippables.jewelry.Jewelry;
 import inventory.equippables.weapons.Weapon;
 import statuseffects.Blinded;
+import statuseffects.Frightened;
+import statuseffects.Frozen;
+import statuseffects.StatusEffect;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class ActionPicker {
@@ -29,15 +34,75 @@ public class ActionPicker {
             currentCharacter.useHealthPotion();
         } else if (shouldEquipGear()) {
             currentCharacter.equipGearComputer();
-        } else if (shouldUseGearAttack()) {
-            currentCharacter.gearBasedAttackComputer();
-        } else if (shouldUseSpecialAttack()) {
-            currentCharacter.specialAttackComputer();
-        } else if (shouldUseStandardAttack()) {
-            currentCharacter.standardAttackComputer();
+        } else if (shouldAttack()) {
+            Attack bestAttack = pickBestAttack();
+
+            int attackSlot = bestAttack.getAttackSlot(currentCharacter);
+
+            switch (attackSlot) {
+                case 1 -> currentCharacter.useAttack1Computer();
+                case 2 -> currentCharacter.useAttack2Computer();
+                case 3 -> currentCharacter.useAttack3Computer();
+                case 4 -> currentCharacter.useGearBasedAttackComputer();
+            }
+
         } else {
             currentCharacter.doNothing();
         }
+    }
+
+    private Attack pickBestAttack() {
+        ArrayList<Attack> allAttacks = new ArrayList<>();
+        Attack attack1 = currentCharacter.getAttack1();
+        Attack attack2 = currentCharacter.getAttack2();
+        Attack attack3 = currentCharacter.getAttack3();
+        Attack gearAttack = null;
+
+        if (currentCharacter.getEquippedItems().hasWeapon()) {
+            gearAttack = currentCharacter.getEquippedItems().getWeapon().getAttack();
+        }
+
+        if (attack1 != null && !attack1.isOnCooldown()) allAttacks.add(attack1);
+        if (attack2 != null && !attack2.isOnCooldown()) allAttacks.add(attack2);
+        if (attack3 != null && !attack3.isOnCooldown()) allAttacks.add(attack3);
+        if (gearAttack != null && !gearAttack.isOnCooldown()) allAttacks.add(gearAttack);
+
+
+        return getBestAttack(allAttacks);
+    }
+
+    private Attack getBestAttack(ArrayList<Attack> availableAttacks) {
+        Attack bestAttack = currentCharacter.getAttack1();
+        for (Attack attack : availableAttacks) {
+            if (attack != null) {
+                // Prefer attacks with effect over attacks without effect
+                if (attack instanceof EffectAttack) {
+                    if (!(bestAttack instanceof EffectAttack)) {
+                        bestAttack = attack;
+                    } else if (attack.MAX_DAMAGE > bestAttack.MAX_DAMAGE) {
+                        bestAttack = attack;
+                    }
+                } else {
+                    if (!(bestAttack instanceof EffectAttack)
+                        && attack.MAX_DAMAGE > bestAttack.MAX_DAMAGE) {
+                        bestAttack = attack;
+                    }
+                }
+            }
+        }
+        return bestAttack;
+    }
+
+    private boolean shouldAttack() {
+        StatusEffect currentEffect = null;
+        if (currentCharacter.hasEffect()) currentEffect = currentCharacter.getEffect();
+
+        if (currentEffect instanceof Frightened
+                || currentEffect instanceof Frozen
+                || currentEffect instanceof Blinded) {
+            return false;
+        }
+        return true;
     }
 
     private boolean shouldUseHealthPotion() {
@@ -90,27 +155,4 @@ public class ActionPicker {
         return false;
     }
 
-    private boolean shouldUseGearAttack() {
-        if (currentCharacter.getEquippedItems().getWeapon() != null) {
-            if (currentCharacter.getEquippedItems().getWeapon().getAttack() instanceof EffectAttack selectedAttack) {
-                if (selectedAttack.isOnCooldown()) return false;
-            }
-        }
-
-
-        return currentCharacter.getEquippedItems().hasWeapon()
-                && currentCharacter.getAttack1().MAX_DAMAGE <= currentCharacter.getEquippedItems().getWeapon().getAttack().MAX_DAMAGE
-                && !(currentCharacter.getEffect() instanceof Blinded);
-    }
-
-    private boolean shouldUseSpecialAttack() {
-
-        return !(currentCharacter.getEffect() instanceof Blinded) &&
-                currentCharacter.getAttack2() != null &&
-                !currentCharacter.getAttack2().isOnCooldown();
-    }
-
-    private boolean shouldUseStandardAttack() {
-        return !(currentCharacter.getEffect() instanceof Blinded);
-    }
 }

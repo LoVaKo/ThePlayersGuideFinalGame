@@ -3,6 +3,7 @@ package gamecharacters.monsters;
 import attacks.basic.Punch;
 import attacks.special.Taunt;
 import defenses.ToughSkin;
+import inventory.equippables.weapons.IronSword;
 import inventory.equippables.weapons.WeaponType;
 
 public class Goblin extends Monster {
@@ -15,6 +16,6 @@ public class Goblin extends Monster {
                 10,
                 3,
                 WeaponType.MELEE);
-        //new IronSword().equipUponCreation(this);
+        new IronSword().equipUponCreation(this);
     }
 }
