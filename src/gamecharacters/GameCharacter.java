@@ -2,11 +2,15 @@ package gamecharacters;
 
 import actionhandler.ActionMenu;
 import attacks.Attack;
+import attacks.CooldownManager;
 import defenses.Defense;
 import inventory.Inventory;
 import inventory.InventoryItem;
 import inventory.equippables.Gear;
 import inventory.equippables.GearHandler;
+import inventory.equippables.armor.Armor;
+import inventory.equippables.jewelry.Jewelry;
+import inventory.equippables.weapons.Weapon;
 import inventory.equippables.weapons.WeaponType;
 import inventory.usables.HealthPotion;
 import main.Battle;
@@ -19,6 +23,7 @@ import java.util.Scanner;
 
 public abstract class GameCharacter {
     private final static CharacterOrderManager characterOrderManager = Battle.getCharacterOrderManager();
+    protected final CooldownManager cooldownManager = new CooldownManager();
     protected final String name;
     protected final Attack attack1;
     protected final Attack attack2;
@@ -67,15 +72,19 @@ public abstract class GameCharacter {
         this.equippedItems.getWeapon().getAttack().useAttack(this, this.enemyParty, false);
     }
 
-    public void standardAttackComputer() {
+    public void useAttack1Computer() {
         attack1.useAttack(this, this.enemyParty, true);
     }
 
-    public void specialAttackComputer() {
+    public void useAttack2Computer() {
         attack2.useAttack(this, this.enemyParty, true);
     }
 
-    public void gearBasedAttackComputer() {
+    public void useAttack3Computer() {
+        attack3.useAttack(this, this.enemyParty, true);
+    }
+
+    public void useGearBasedAttackComputer() {
         this.equippedItems.getWeapon().getAttack().useAttack(this, this.enemyParty, true);
     }
 
@@ -145,15 +154,52 @@ public abstract class GameCharacter {
     }
 
     public void equipGearComputer() {
-        // Looking for inventory for the first instance of Gear
         ArrayList<InventoryItem> partyInventory = this.getOwnParty().getInventory().getItems();
         Gear pickedGear = null;
+        boolean donePicking = false;
+
+        // Determine the best possible options for each type of gear
+        Weapon bestWeapon = getEquippedItems().getWeapon();
+        Armor bestArmor = getEquippedItems().getArmor();
+        Jewelry bestJewelry = getEquippedItems().getJewelry();
 
         for (InventoryItem inventoryItem : partyInventory) {
-            if (inventoryItem instanceof Gear gear) {
-                pickedGear = gear;
-                break;
+            if (inventoryItem instanceof Weapon weapon) {
+                if (weapon.getType().equals(this.preferredWeaponType)) {
+                    if (bestWeapon == null) {
+                        bestWeapon = weapon;
+                    } else if (bestWeapon.getLevel() < weapon.getLevel()) {
+                        bestWeapon = weapon;
+                    }
+                }
+            } else if (inventoryItem instanceof Armor armor) {
+                if (bestArmor == null) {
+                    bestArmor = armor;
+                } else if (bestArmor.getLevel() < armor.getLevel()) {
+                    bestArmor = armor;
+                }
+            } else if (inventoryItem instanceof Jewelry jewelry) {
+                if (bestJewelry == null) {
+                    bestJewelry = jewelry;
+                } else if (bestJewelry.getLevel() < jewelry.getLevel()) {
+                    bestJewelry = jewelry;
+                }
             }
+        }
+
+        // Equip better weapon first, then better armor, then better jewelry
+        if (bestWeapon != getEquippedItems().getWeapon()) {
+            pickedGear = bestWeapon;
+            donePicking = true;
+        }
+        if (bestArmor != getEquippedItems().getArmor()
+                && !donePicking) {
+            pickedGear = bestArmor;
+            donePicking = true;
+        }
+        if (bestJewelry != getEquippedItems().getJewelry()
+                && !donePicking) {
+            pickedGear = bestJewelry;
         }
         assert pickedGear != null;
         pickedGear.equip(this);
@@ -243,6 +289,10 @@ public abstract class GameCharacter {
 
     public WeaponType getPreferredWeaponType() {
         return preferredWeaponType;
+    }
+
+    public CooldownManager getCooldownManager() {
+        return cooldownManager;
     }
 
     public int getStartingHP() {

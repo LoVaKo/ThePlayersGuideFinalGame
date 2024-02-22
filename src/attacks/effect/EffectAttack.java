@@ -28,7 +28,7 @@ public abstract class EffectAttack extends Attack {
         if (!target.hasEffect()) {
             System.out.println(target + " has been " + effect + "!");
             target.setEffect(effect);
-            cooldownManager.add(effect);
+            target.getCooldownManager().add(effect);
 
         } else if (target.getEffect() instanceof CoolDown) {
             ((CoolDown) target.getEffect()).checkForCooldown(effect, target);
@@ -59,7 +59,7 @@ public abstract class EffectAttack extends Attack {
         this.counter--;
     }
 
-    public void addToCooldownManager() {
-        cooldownManager.add(this);
+    public void addToCooldownManager(GameCharacter currentCharacter) {
+        currentCharacter.getCooldownManager().add(this);
     }
 }

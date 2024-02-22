@@ -84,7 +84,7 @@ public class ActionPicker {
                     }
                 } else {
                     if (!(bestAttack instanceof EffectAttack)
-                        && attack.MAX_DAMAGE > bestAttack.MAX_DAMAGE) {
+                            && attack.MAX_DAMAGE > bestAttack.MAX_DAMAGE) {
                         bestAttack = attack;
                     }
                 }
@@ -97,12 +97,9 @@ public class ActionPicker {
         StatusEffect currentEffect = null;
         if (currentCharacter.hasEffect()) currentEffect = currentCharacter.getEffect();
 
-        if (currentEffect instanceof Frightened
-                || currentEffect instanceof Frozen
-                || currentEffect instanceof Blinded) {
-            return false;
-        }
-        return true;
+        return !(currentEffect instanceof Frightened)
+                && !(currentEffect instanceof Frozen)
+                && !(currentEffect instanceof Blinded);
     }
 
     private boolean shouldUseHealthPotion() {

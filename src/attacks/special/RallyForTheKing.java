@@ -25,7 +25,7 @@ public class RallyForTheKing extends SpecialAttack {
         for (GameCharacter partyMember : character.getOwnParty().getCharacters()) {
             Inspired inspiredEffect = new Inspired();
             partyMember.setEffect(inspiredEffect);
-            cooldownManager.add(inspiredEffect);
+            character.getCooldownManager().add(inspiredEffect);
 
             if (partyMember.equals(character)) {
                 // When the effect is put on the character itself, account for immediate removal.
@@ -37,10 +37,5 @@ public class RallyForTheKing extends SpecialAttack {
                 effect.setActiveCounter(activeCounter + 1);
             }
         }
-    }
-
-    @Override
-    protected int getBaseDamage() {
-        return 0;
     }
 }

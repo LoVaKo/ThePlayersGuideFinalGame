@@ -1,4 +1,4 @@
-package main;
+package attacks;
 
 import attacks.effect.EffectAttack;
 import statuseffects.StatusEffect;
@@ -14,6 +14,9 @@ public class CooldownManager {
     private final ArrayList<StatusEffect> activeEffectsToBeRemoved = new ArrayList<>();
     private final ArrayList<StatusEffect> cooldownEffectsToBeRemoved = new ArrayList<>();
 
+    public CooldownManager() {
+
+    }
 
     public void add(Object object) {
 

@@ -23,7 +23,7 @@ public class RaiseSkeleton extends SpecialAttack {
         System.out.println("A Skeleton climbs out from the ground!");
         Skeleton skeleton = new Skeleton();
         CharacterOrderManager.add(skeleton);
-        addToCooldownManager();
+        addToCooldownManager(character);
 
         // If staff is used by a hero, inform them of their mistake (Skeletons are monsters and always go in the Monster Party)
         if (character instanceof Hero) {
@@ -31,8 +31,4 @@ public class RaiseSkeleton extends SpecialAttack {
         }
     }
 
-    @Override
-    protected int getBaseDamage() {
-        return 0;
-    }
 }

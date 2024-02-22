@@ -2,10 +2,9 @@ package attacks;
 
 import actionhandler.ActionMenu;
 import attacks.effect.EffectAttack;
-import attacks.special.SpecialAttack;
 import gamecharacters.GameCharacter;
 import gamecharacters.Party;
-import main.CooldownManager;
+import statuseffects.Enraged;
 import statuseffects.Frozen;
 import statuseffects.Inspired;
 
@@ -14,7 +13,6 @@ import java.util.Scanner;
 
 public abstract class Attack {
     public final int MAX_DAMAGE;
-    protected final CooldownManager cooldownManager = main.Battle.getCooldownManager();
     private final double SUCCESS_RATE;
     protected String name;
     protected DamageType damageType;
@@ -49,7 +47,7 @@ public abstract class Attack {
         System.out.println(currentCharacter + " used " + this.name + " on " + target);
 
         // Resolve attack
-        if (isSuccessful()) {
+        if (isSuccessful(currentCharacter)) {
 
             // If the attack deals damage, resolve damage done
             if (MAX_DAMAGE > 0) {
@@ -84,7 +82,7 @@ public abstract class Attack {
 
         // Whether attack is successful or not, add to cooldown manager when necessary
         if (this instanceof EffectAttack) {
-            ((EffectAttack) this).addToCooldownManager();
+            ((EffectAttack) this).addToCooldownManager(currentCharacter);
         }
 
     }
@@ -156,6 +154,9 @@ public abstract class Attack {
             if (currentCharacter.getEffect() instanceof Inspired) {
                 System.out.println(currentCharacter.getName() + " is Inspired. Damage is increased by 1.");
                 effectModifier = effectModifier + 1;
+            } else if (currentCharacter.getEffect() instanceof Enraged) {
+                System.out.println(currentCharacter.getName() + " is Enraged. Damage is doubled.");
+                effectModifier = getBaseDamage();
             }
         }
         if (target.hasEffect()) {
@@ -182,9 +183,17 @@ public abstract class Attack {
         return 0;
     }
 
-    public boolean isSuccessful() {
+    public boolean isSuccessful(GameCharacter character) {
         Random random = new Random();
         double rollForSuccess = random.nextDouble();
+
+        if (character.hasEffect()) {
+            if (character.getEffect() instanceof Enraged) {
+                // when enraged 75% of attacks will miss
+                return rollForSuccess < 0.25;
+            }
+        }
+
         return rollForSuccess <= SUCCESS_RATE;
     }
 
@@ -195,8 +204,6 @@ public abstract class Attack {
 
     public boolean isOnCooldown() {
         if (this instanceof EffectAttack) {
-            return this.isOnCooldown();
-        } else if (this instanceof SpecialAttack) {
             return this.isOnCooldown();
         } else {
             return false;

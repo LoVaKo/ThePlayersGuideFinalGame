@@ -18,7 +18,6 @@ import java.util.Scanner;
 
 
 public class Battle {
-    private final static CooldownManager cooldownManager = new CooldownManager();
     private final static CharacterOrderManager characterOrderManager = new CharacterOrderManager();
     private final static Scanner scanner = new Scanner(System.in);
     private final Game game;
@@ -38,10 +37,6 @@ public class Battle {
     }
 
     // Getters
-    public static CooldownManager getCooldownManager() {
-        return cooldownManager;
-    }
-
     public static CharacterOrderManager getCharacterOrderManager() {
         return characterOrderManager;
     }
@@ -79,6 +74,7 @@ public class Battle {
                 removeDeadCharacters();
                 checkForEndOfBattle();
                 updateCounters();
+                currentCharacter.getCooldownManager().updateCooldowns();
 
                 // End battle if all enemies are defeated
                 if (allEnemiesDefeated) {
@@ -89,7 +85,7 @@ public class Battle {
                 // End battle if all heroes are defeated
                 if (game.gameOver) {
                     characterOrderManager.clear();
-                    cooldownManager.clear();
+                    currentCharacter.getCooldownManager().clear();
                     break;
                 }
 
@@ -100,7 +96,6 @@ public class Battle {
 
             // When all characters have taken their turn, END ROUND
             // Updating cooldowns
-            cooldownManager.updateCooldowns();
             removeRedundantStatusEffects();
 
             // Back to the first character by copying updated characterorder
