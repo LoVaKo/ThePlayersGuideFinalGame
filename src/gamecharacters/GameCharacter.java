@@ -265,6 +265,24 @@ public abstract class GameCharacter {
         }
     }
 
+    public void checkForStatusEffect() {
+        if (this.hasEffect()) {
+            if (!(this.getEffect() instanceof CoolDown)) {
+                System.out.println(this.name + " is " + this.effect.getName() + "!");
+                this.effect.execute(this);
+                System.out.println("Remaining number of rounds: " + (this.effect.getActiveCounter() - 1));
+                System.out.println();
+            }
+        }
+    }
+
+    public void resolveDeath() {
+        setDead(true);
+        ownParty.removeCharacter(this); // Remove character from party
+        characterOrderManager.getOrder().remove(this); // Remove character from character order
+        if (hasEffect()) getEffect().removeFromCooldown(); // Remove any active cooldowns from cooldown manager
+    }
+
 
     // Getters and setters
     public int getCurrentHP() {
@@ -357,22 +375,5 @@ public abstract class GameCharacter {
         return this.effect != null;
     }
 
-    public void checkForStatusEffect() {
-        if (this.hasEffect()) {
-            if (!(this.getEffect() instanceof CoolDown)) {
-                System.out.println(this.name + " is " + this.effect.getName() + "!");
-                this.effect.execute(this);
-                System.out.println("Remaining number of rounds: " + (this.effect.getActiveCounter() - 1));
-                System.out.println();
-            }
-        }
-    }
-
-    public void resolveDeath() {
-        setDead(true);
-        ownParty.removeCharacter(this); // Remove character from party
-        characterOrderManager.getOrder().remove(this); // Remove character from character order
-        if (hasEffect()) getEffect().removeFromCooldown(); // Remove any active cooldowns from cooldown manager
-    }
 
 }

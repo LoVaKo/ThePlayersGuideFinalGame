@@ -100,8 +100,6 @@ public class Battle {
 
             // Back to the first character by copying updated characterorder
             order = new ArrayList<>(characterOrderManager.getOrder());
-
-
         }
     }
 

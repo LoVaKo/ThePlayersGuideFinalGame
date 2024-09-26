@@ -63,7 +63,7 @@ public abstract class Hero extends GameCharacter {
                             String name = scanner.nextLine();
                             chosenHero = new Knight(name);
                         } else if (chosenHeroNum == 2) {
-                            System.out.println("What is the archer's name?");
+                            System.out.println("What is the Archer's name?");
                             String name = scanner.nextLine();
                             chosenHero = new Archer(name);
                         } else if (chosenHeroNum == 3) {

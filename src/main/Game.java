@@ -17,7 +17,6 @@ public class Game {
     }
 
     public static void main(String[] args) {
-        // Setting GameMode
         Game game = new Game();
         setupHeroParty();
         game.execute();
